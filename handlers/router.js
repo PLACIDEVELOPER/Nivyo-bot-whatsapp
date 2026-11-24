@@ -1,10 +1,22 @@
 // handlers/router.js
 const { SERVICES, CATEGORIES } = require('../services');
-const { sendWhatsAppMessage, userSessions, Q, cleanValue, getValidator, getError, askNextField, saveAndConfirm } = require('./common');
+const {
+  sendWhatsAppMessage,
+  userSessions,
+  Q,
+  cleanValue,
+  getDynamicOfficialFee,
+  getValidator,
+  getError,
+  askNextField,
+  saveAndConfirm
+} = require('./common');
 const marriageDeclaration = require('./marriageDeclaration');
 
 async function handleMessage(from, text) {
-  if (!userSessions[from] || text.toLowerCase() === 'menu' || text === '0') {
+  const input = (text || '').trim();
+
+  if (!userSessions[from] || input.toLowerCase() === 'menu' || input === '0') {
     userSessions[from] = { step: 'CATEGORY', data: {} };
     await sendWhatsAppMessage(from, categoryMenuText());
     return;
@@ -13,35 +25,54 @@ async function handleMessage(from, text) {
   const session = userSessions[from];
 
   switch (session.step) {
-    case 'CATEGORY':            return handleCategory(from, text, session);
-    case 'SERVICE_IN_CATEGORY': return handleServiceSelect(from, text, session);
-    case 'CONFIRM_AGENT_FEE':   return handleAgentFeeConfirm(from, text, session);
-    case 'ASK_MARRIAGE_DAY':    return marriageDeclaration.handleMarriageDay(from, text, session);
-    case 'ASK_APPLICANT_TYPE':  return handleApplicantType(from, text, session);
-    case 'ASK_FIELD':           return handleFieldAnswer(from, text, session);
-    case 'ATTACHMENT_UPLOAD':   return handleAttachmentUpload(from, text, session);
+    case 'CATEGORY':            return handleCategory(from, input, session);
+    case 'SERVICE_IN_CATEGORY': return handleServiceSelect(from, input, session);
+    case 'CONFIRM_AGENT_FEE':   return handleAgentFeeConfirm(from, input, session);
+    case 'ASK_MARRIAGE_DAY':    return marriageDeclaration.handleMarriageDay(from, input, session);
+    case 'ASK_APPLICANT_TYPE':  return handleApplicantType(from, input, session);
+    case 'ASK_FIELD':           return handleFieldAnswer(from, input, session);
+    case 'ATTACHMENT_UPLOAD':   return handleAttachmentUpload(from, input, session);
   }
 }
 
 function categoryMenuText() {
+  const keys = Object.keys(CATEGORIES).sort((a, b) => Number(a) - Number(b));
+  const lines = keys.map((k) => {
+    const cat = CATEGORIES[k];
+    const hasAvailable = Object.values(cat.services || {}).some((s) => s.available);
+    const suffix = hasAvailable ? '' : ' (coming soon)';
+    return `${k}. ${cat.name}${suffix}`;
+  });
+
+  const lastKey = keys[keys.length - 1] || '5';
+
   return (
     "Muraho! Murakaza neza kuri Serivisi za Irembo.\n" +
     "Hitamo icyiciro / Choose a category:\n\n" +
-    "1. Umuryango / Family\n2. Ubuzima / Health\n3. Police\n4. Izindi / Other\n\n" +
-    "(Andika '0' igihe cyose ushaka gusubira ku ntangiriro)"
+    lines.join('\n') +
+    "\n\n" +
+    `(Andika '0' igihe cyose ushaka gusubira ku ntangiriro / Type '0' anytime to return to start)`
   );
 }
 
 async function handleCategory(from, text, session) {
   const category = CATEGORIES[text];
   if (!category) {
-    return sendWhatsAppMessage(from, "⚠️ Hitamo 1, 2, 3 cyangwa 4 / Please reply with 1, 2, 3, or 4.");
+    const keys = Object.keys(CATEGORIES).sort((a, b) => Number(a) - Number(b));
+    const listText = keys.length > 1
+      ? `${keys.slice(0, -1).join(', ')} cyangwa ${keys[keys.length - 1]} / Please reply with ${keys.slice(0, -1).join(', ')}, or ${keys[keys.length - 1]}.`
+      : `${keys[0]}.`;
+    return sendWhatsAppMessage(from, `⚠️ Hitamo ${listText}`);
   }
+
+  session.data.categoryKey = text;
   session.data.category = category.name;
   session.step = 'SERVICE_IN_CATEGORY';
 
   let menu = `Wahisemo: *${category.name}*\n\nHitamo serivisi / Choose service:\n\n`;
-  for (const [num, svc] of Object.entries(category.services)) {
+  const serviceNums = Object.keys(category.services || {}).sort((a, b) => Number(a) - Number(b));
+  for (const num of serviceNums) {
+    const svc = category.services[num];
     const s = SERVICES[svc.key];
     menu += `${num}. ${s ? s.name : svc.key}${svc.available ? '' : ' (coming soon)'}\n`;
   }
@@ -55,8 +86,9 @@ async function handleServiceSelect(from, text, session) {
     return sendWhatsAppMessage(from, categoryMenuText());
   }
 
-  const category = Object.values(CATEGORIES).find(c => c.name === session.data.category);
-  const selected = category?.services[text];
+  const category = CATEGORIES[session.data.categoryKey] ||
+    Object.values(CATEGORIES).find(c => c.name === session.data.category);
+  const selected = category?.services?.[text];
   if (!selected) return sendWhatsAppMessage(from, "⚠️ Hitamo umubare uri mu rutonde / Please choose a number from the list.");
   if (!selected.available) return sendWhatsAppMessage(from, "⚠️ Iyi serivisi ntirabaho / This service is coming soon. Please choose another.");
 
@@ -64,24 +96,27 @@ async function handleServiceSelect(from, text, session) {
   Object.assign(session.data, {
     service: service.name,
     serviceKey: service.key,
-    officialFee: service.officialFee,
-    agentFee: service.agentFee,
+    officialFee: service.officialFee || 0,
+    agentFee: service.agentFee || 0,
     askApplicantType: !!service.askApplicantType,
     askMarriageDay: !!service.askMarriageDay,
     requiresAttachment: !!service.requiresAttachment,
     fieldsToAsk: [...service.fields]
   });
 
+  const baseOfficialFee = getDynamicOfficialFee(session.data);
+
   session.step = 'CONFIRM_AGENT_FEE';
   await sendWhatsAppMessage(from,
     `Wahisemo: *${service.name}*\n\n` +
     (session.data.askMarriageDay
       ? `💰 Official Irembo fee: *depends on the day* (FREE on Thursday, 50,000 Rwf on other days)\n`
-      : `💰 Official Irembo fee: Rwf ${service.officialFee.toLocaleString()}\n`) +
-    `🤝 Our agent fee: Rwf ${service.agentFee.toLocaleString()}\n` +
+      : `💰 Official Irembo fee: Rwf ${baseOfficialFee.toLocaleString()}\n`) +
+    `🤝 Our agent fee: Rwf ${(service.agentFee || 0).toLocaleString()}\n` +
     `⏱️ Processing: ${service.processingDays} working day(s)\n` +
     (session.data.requiresAttachment ? `📎 This service requires PDF attachments.\n` : '') +
-    `\nDo you agree to pay the agent fee of *Rwf ${service.agentFee.toLocaleString()}*?\n\n` +
+    (service.note ? `\nℹ️ ${service.note}\n` : '') +
+    `\nDo you agree to pay the agent fee of *Rwf ${(service.agentFee || 0).toLocaleString()}*?\n\n` +
     `Reply *1* Yes, I agree\nReply *2* No, cancel`
   );
 }

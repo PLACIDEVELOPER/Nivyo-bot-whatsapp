@@ -20,6 +20,9 @@ function isDuplicate(id) {
   return false;
 }
 
+const ALLOWED_IMAGE_MIMES = new Set(['image/jpeg', 'image/jpg', 'image/png']);
+const ALLOWED_DOC_MIMES = new Set(['application/pdf']);
+
 app.get('/', (req, res) => res.send('Irembo bot running'));
 
 app.get('/webhook', (req, res) => {
@@ -48,12 +51,50 @@ app.post('/webhook', async (req, res) => {
     if (message.type !== 'text') {
       const session = userSessions[from];
 
-      // client is sending a PDF during the attachment step
-      if (message.type === 'document' && session && session.step === 'ATTACHMENT_UPLOAD') {
+      // client is sending a PDF document or JPG/PNG image during the attachment step
+      if (session && session.step === 'ATTACHMENT_UPLOAD' && (message.type === 'document' || message.type === 'image')) {
         session.data.attachmentIds = session.data.attachmentIds || [];
-        session.data.attachmentIds.push(message.document.id);
-        console.log(`📎 ${from} sent document (${session.data.attachmentIds.length})`);
-        await sendWhatsAppMessage(from, `📎 Received (${session.data.attachmentIds.length}). Send more, or type *done* when finished.`);
+        session.data.attachments = session.data.attachments || [];
+
+        if (message.type === 'document') {
+          const doc = message.document || {};
+          const mime = (doc.mime_type || '').toLowerCase();
+          const filename = doc.filename || 'document.pdf';
+          const isPdf = ALLOWED_DOC_MIMES.has(mime) || filename.toLowerCase().endsWith('.pdf');
+
+          if (!isPdf) {
+            await sendWhatsAppMessage(
+              from,
+              "⚠️ Ohereza dosiye ya *PDF* cyangwa ifoto ya *JPG/PNG* gusa / Please send *PDF* documents or *JPG/PNG* images only."
+            );
+            return;
+          }
+
+          session.data.attachmentIds.push(doc.id);
+          session.data.attachments.push({ id: doc.id, type: 'PDF', mimeType: mime, filename });
+          console.log(`📎 ${from} sent PDF (${session.data.attachmentIds.length}): ${filename}`);
+        } else if (message.type === 'image') {
+          const img = message.image || {};
+          const mime = (img.mime_type || '').toLowerCase();
+
+          if (mime && !ALLOWED_IMAGE_MIMES.has(mime)) {
+            await sendWhatsAppMessage(
+              from,
+              "⚠️ Ohereza ifoto ya *JPG* cyangwa *PNG* gusa / Please send *JPG* or *PNG* images only."
+            );
+            return;
+          }
+
+          session.data.attachmentIds.push(img.id);
+          session.data.attachments.push({ id: img.id, type: 'IMAGE', mimeType: mime || 'image/jpeg' });
+          console.log(`🖼️ ${from} sent image (${session.data.attachmentIds.length})`);
+        }
+
+        await sendWhatsAppMessage(
+          from,
+          `✅ Twakiriye inyandiko/ifoto (${session.data.attachmentIds.length}). Ohereza izindi niba zihari, cyangwa wandike *done* nurangiza.\n` +
+          `✅ Received (${session.data.attachmentIds.length}). Send more PDF/JPG/PNG files, or type *done* when finished.`
+        );
         return;
       }
 

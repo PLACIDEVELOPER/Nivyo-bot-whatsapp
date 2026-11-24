@@ -119,7 +119,8 @@ const SERVICES = {
       'email'
     ]
   },
-    single_certificate: {
+
+  single_certificate: {
     key: 'single_certificate',
     name: "Certificate of Being Single (Icyemezo cy'uko uri ingaragu)",
     category: 'Umuryango / Family',
@@ -134,7 +135,8 @@ const SERVICES = {
       'processingDistrict', 'processingSector'
     ]
   },
- provisional_license: {
+
+  provisional_license: {
     key: 'provisional_license',
     name: "Provisional Driving License Registration (Kwiyandikisha ikizamini cy'agateganyo)",
     category: 'Polisi / Police & Transport',
@@ -149,6 +151,7 @@ const SERVICES = {
       'testDistrict', 'testCenter', 'testLanguage', 'testMode'
     ]
   },
+
   definitive_license: {
     key: 'definitive_license',
     name: "Definitive Driving License Registration (Kwiyandikisha ikizamini cy'uruhushya rwa burundu)",
@@ -164,6 +167,7 @@ const SERVICES = {
       'provisionalLicenseNumber', 'licenseCategory', 'testDistrict', 'testCenter'
     ]
   },
+
   supplementary_driving_test: {
     key: 'supplementary_driving_test',
     name: "Supplementary Driving Test Registration (Kwiyandikisha ikizamini cy'inyongera)",
@@ -179,6 +183,7 @@ const SERVICES = {
       'definitiveLicenseNumber', 'additionalCategory', 'testDistrict', 'testCenter', 'preferredTestDate'
     ]
   },
+
   renewal_provisional_license: {
     key: 'renewal_provisional_license',
     name: "Renewal of Provisional Driving Licence (Kongera igihe cy'uruhushya rw'agateganyo)",
@@ -194,6 +199,7 @@ const SERVICES = {
       'provisionalLicenseNumber', 'licenseExpiryDate', 'renewalReason'
     ]
   },
+
   renewal_definitive_license: {
     key: 'renewal_definitive_license',
     name: "Renewal of Definitive Driving Licence (Kongera igihe cy'uruhushya rwa burundu)",
@@ -209,6 +215,7 @@ const SERVICES = {
       'definitiveLicenseNumber', 'licenseExpiryDate', 'pickupStation'
     ]
   },
+
   duplicate_definitive_license: {
     key: 'duplicate_definitive_license',
     name: "Duplicate of Definitive Driving Licence (Kopi y'uruhushya rwa burundu rwatakaye/rwangiritse)",
@@ -224,6 +231,7 @@ const SERVICES = {
       'duplicateReason', 'pickupStation'
     ]
   },
+
   license_category_upgrade: {
     key: 'license_category_upgrade',
     name: "Driving License Category Upgrade (Kongera / Guhindura icyiciro cy'uruhushya)",
@@ -239,6 +247,7 @@ const SERVICES = {
       'currentLicenseNumber', 'currentCategory', 'targetCategory', 'testDistrict', 'testCenter'
     ]
   },
+
   traffic_fines: {
     key: 'traffic_fines',
     name: "Traffic Fines Lookup & Payment (Amande yo mu muhanda)",
@@ -254,6 +263,7 @@ const SERVICES = {
       'vehiclePlate', 'violationReference'
     ]
   },
+
   provisional_licence_issuance: {
     key: 'provisional_licence_issuance',
     name: "Provisional Driving Licence Application - Post-Exam (Gusaba uruhushya rw'agateganyo nyuma yo gutsinda)",
@@ -269,6 +279,7 @@ const SERVICES = {
       'examRegistrationCode', 'examPassDate'
     ]
   },
+
   definitive_licence_issuance: {
     key: 'definitive_licence_issuance',
     name: "Definitive Driving Licence Application - Post-Exam (Gusaba uruhushya rwa burundu nyuma yo gutsinda)",
@@ -284,6 +295,7 @@ const SERVICES = {
       'examRegistrationCode', 'collectionDistrict', 'pickupStation'
     ]
   },
+
   supplementary_licence_issuance: {
     key: 'supplementary_licence_issuance',
     name: "Supplementary Driving Licence Application - Post-Exam (Gusaba icyiciro cy'inyongera nyuma yo gutsinda)",
@@ -299,6 +311,7 @@ const SERVICES = {
       'definitiveLicenseNumber', 'examRegistrationCode', 'additionalCategory', 'collectionDistrict', 'pickupStation'
     ]
   },
+
   driving_exam_results: {
     key: 'driving_exam_results',
     name: "Driving Licence Exam Results (Kureba amanota y'ikizamini)",
@@ -314,6 +327,7 @@ const SERVICES = {
       'examType', 'examRegistrationCode', 'examDate'
     ]
   },
+
   replacement_definitive_license: {
     key: 'replacement_definitive_license',
     name: "Replacement of Definitive Driving Licence (Gusimbuza uruhushya rwa burundu)",
@@ -329,6 +343,7 @@ const SERVICES = {
       'definitiveLicenseNumber', 'replacementReason', 'pickupStation'
     ]
   },
+
   correction_definitive_license: {
     key: 'correction_definitive_license',
     name: "Correction of Definitive Driving Licence (Gukosora uruhushya rwa burundu)",
@@ -344,6 +359,7 @@ const SERVICES = {
       'definitiveLicenseNumber', 'fieldToCorrect', 'correctedValue', 'pickupStation'
     ]
   },
+
   correction_provisional_license: {
     key: 'correction_provisional_license',
     name: "Correction of Provisional Driving Licence (Gukosora uruhushya rw'agateganyo)",
@@ -359,7 +375,8 @@ const SERVICES = {
       'provisionalLicenseNumber', 'fieldToCorrect', 'correctedValue'
     ]
   },
- adoption_record: {
+
+  adoption_record: {
     key: 'adoption_record',
     name: "Adoption Record (Inyandiko yo kubera umubyeyi umwana)",
     category: 'Family',
@@ -375,6 +392,7 @@ const SERVICES = {
       'processingDistrict', 'processingSector'
     ]
   },
+
   record_of_recognition: {
     key: 'record_of_recognition',
     name: "Record of Recognition (Inyandiko yo kwemera umwana)",
@@ -392,6 +410,7 @@ const SERVICES = {
       'processingDistrict', 'processingSector'
     ]
   },
+
   divorce_record: {
     key: 'divorce_record',
     name: "Divorce Record (Inyandiko y'ubutane)",
@@ -408,6 +427,7 @@ const SERVICES = {
       'processingDistrict', 'processingSector'
     ]
   },
+
   divorce_certificate: {
     key: 'divorce_certificate',
     name: "Certificate of Divorce (Icyemezo cy'ubutane)",
@@ -424,6 +444,7 @@ const SERVICES = {
       'processingDistrict', 'processingSector'
     ]
   },
+
   certificate_of_succession: {
     key: 'certificate_of_succession',
     name: "Certificate of Succession (Icyemezo cy'uburagwe)",
@@ -440,6 +461,7 @@ const SERVICES = {
       'processingDistrict', 'processingSector'
     ]
   },
+
   certificate_of_cohabitation: {
     key: 'certificate_of_cohabitation',
     name: "Certificate of Cohabitation",
@@ -456,6 +478,7 @@ const SERVICES = {
       'processingDistrict', 'processingSector'
     ]
   },
+
   certificate_of_residence: {
     key: 'certificate_of_residence',
     name: "Certificate of Residence (Icyemezo cy'ubuturo)",
@@ -472,6 +495,7 @@ const SERVICES = {
       'residenceCell', 'residenceVillage'
     ]
   },
+
   certificate_of_widow_widower: {
     key: 'certificate_of_widow_widower',
     name: "Certificate of Widow / Widower (Icyemezo cy'ubupfakazi)",
@@ -488,6 +512,7 @@ const SERVICES = {
       'processingDistrict', 'processingSector'
     ]
   },
+
   orphan_status: {
     key: 'orphan_status',
     name: "Authentication for an Orphan's Status (Icyemezo cy'ubupfubyi)",
@@ -504,6 +529,7 @@ const SERVICES = {
       'processingDistrict', 'processingSector'
     ]
   },
+
   genocide_survivor_certificate: {
     key: 'genocide_survivor_certificate',
     name: "Certificate of Needy Survivor of the 1994 Genocide against the Tutsi (Icyemezo cy'uwarokotse Jenoside utishoboye)",
@@ -568,6 +594,341 @@ const SERVICES = {
       'processingDistrict', 'processingSector', 'residenceCell'
     ]
   },
+
+  epassport_application: {
+    key: 'epassport_application',
+    name: "Application for Rwandan e-Passport (Pasiporo nyarwanda)",
+    category: 'Immigration & Emigration',
+    officialFee: 75000,
+    agentFee: 2000,
+    processingDays: 4,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note: "Official DGIE fee depends on passport type: Minor (<16 yrs, 5 yrs) = Rwf 25,000 | Ordinary (5 yrs) = Rwf 75,000 | Ordinary (10 yrs) = Rwf 100,000 | Service = Rwf 5,000. Processing takes ~4 working days after biometric capture. Requires passport photo (white background) and ID/birth proof. / Amafaranga ya leta aterwa n'ubwoko bwa pasiporo (5,000 - 100,000 Rwf), bitwara iminsi ~4 y'akazi.",
+    fields: [
+      'fullName', 'applicantIdOrChildId', 'billingPhone', 'email',
+      'passportCategory', 'applicationType', 'currentPassportNumber',
+      'biometricOffice', 'travelReason'
+    ]
+  },
+  laissez_passer: {
+    key: 'laissez_passer',
+    name: "Laissez-Passer Application (Uruhushya rw'inzira rwa Laissez-Passer)",
+    category: 'Immigration & Emigration',
+    officialFee: 10000,
+    agentFee: 1500,
+    processingDays: 3,
+    requiresEmail: false,
+    requiresAttachment: true,
+    note: "Official DGIE fee: 16+/Adult = Rwf 10,000 | Minor (<16) = Rwf 5,000 (~3 working days new / ~2 days renewal). / Amafaranga ya leta: abakuru/16+ = 10,000 Rwf, abana (<16) = 5,000 Rwf.",
+    fields: [
+      'fullName', 'billingPhone', 'email',
+      'ageGroup', 'applicantIdOrChildId', 'requestType',
+      'destinationCountry', 'travelReason', 'collectionOffice'
+    ]
+  },
+
+  cepgl_travel_document: {
+    key: 'cepgl_travel_document',
+    name: "CEPGL Travel Document (Uruhushya rw'ingendo rwa CEPGL)",
+    category: 'Immigration & Emigration',
+    officialFee: 1000,
+    agentFee: 1000,
+    processingDays: 1,
+    requiresEmail: false,
+    requiresAttachment: true,
+    note: "Official DGIE fee: Rwandan nationals = Rwf 1,000 | Foreigners = Rwf 10,000 (~1 working day). / Amafaranga ya leta: Abanyarwanda = 1,000 Rwf, Abanyamahanga = 10,000 Rwf.",
+    fields: [
+      'fullName', 'billingPhone', 'email',
+      'nationalityType', 'documentIdNumber', 'requestType',
+      'previousCepglNumber', 'travelReason', 'processingOffice'
+    ]
+  },
+  permit_extension: {
+    key: 'permit_extension',
+    name: "Permit Extension (Kongera igihe cy'uruhushya rwo gutura/gukora)",
+    category: 'Immigration & Emigration',
+    officialFee: 0,
+    agentFee: 3000,
+    processingDays: 7,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note: "Official DGIE fee depends on permit subclass and duration (e.g., Dependent/Student vs. Work/Investor). Apply before current permit expires (~7 working days). / Amafaranga ya leta aterwa n'ubwoko bw'uruhushya n'igihe usaba.",
+    fields: [
+      'fullName', 'billingPhone', 'email',
+      'nationality', 'passportNumber', 'currentPermitNumber',
+      'permitCategory', 'permitExpiryDate', 'extensionDuration',
+      'extensionReason', 'sponsorName'
+    ]
+  },
+
+  permit_transfer: {
+    key: 'permit_transfer',
+    name: "Permit Transfer (Kwimura uruhushya kuri pasiporo nshya / umukoresha)",
+    category: 'Immigration & Emigration',
+    officialFee: 10000,
+    agentFee: 2000,
+    processingDays: 5,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note: "Official DGIE fee is Rwf 10,000 for transferring an active permit to a new passport (~5 working days); employer/sponsor transfers may carry class-specific fees. / Amafaranga ya leta ni Rwf 10,000 iyo wimura uruhushya kuri pasiporo nshya.",
+    fields: [
+      'fullName', 'billingPhone', 'email',
+      'nationality', 'transferType', 'currentPermitNumber',
+      'oldPassportNumber', 'newPassportNumber', 'transferDetails'
+    ]
+  },
+  rwanda_visa_application: {
+    key: 'rwanda_visa_application',
+    name: "Rwanda Visa Application (Gusaba Visa yo kwinjira mu Rwanda)",
+    category: 'Immigration & Emigration',
+    officialFee: 68000,
+    agentFee: 3000,
+    processingDays: 4,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note: "Official DGIE fee depends on visa type (payable in RWF or USD): Transit = $30 (~Rwf 41,000) | Single Entry / Conference = $50 (~Rwf 68,000) | Multiple Entry = $70 (~Rwf 95,000) | East Africa Tourist Visa = $100 (~Rwf 136,000). Processing takes ~4 working days. / Amafaranga ya leta aterwa n'ubwoko bwa visa (30$ - 100$), bitwara iminsi ~4 y'akazi.",
+    fields: [
+      'fullName', 'billingPhone', 'email',
+      'nationality', 'documentType', 'visaCategory', 'visaType', 'paymentCurrency',
+      'dateOfBirth', 'gender', 'civilStatus', 'profession',
+      'motherName', 'fatherName', 'countryOfBirth', 'currentAddress',
+      'passportNumber', 'passportIssueDate', 'passportExpiryDate',
+      'firstTimeInRwanda', 'arrivalDate', 'departureDate',
+      'entryPort', 'addressInRwanda', 'travelReason'
+    ]
+  },
+  rwanda_visa_renewal: {
+    key: 'rwanda_visa_renewal',
+    name: "Rwanda Visa Renewal (Kongeresha igihe cya Visa yo mu Rwanda)",
+    category: 'Immigration & Emigration',
+    officialFee: 68000,
+    agentFee: 3000,
+    processingDays: 4,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note: "Official DGIE fee depends on visa subclass (e.g., V1 Single = $50 / ~Rwf 68,000; Multiple = $70 / ~Rwf 95,000). Processing takes ~4 working days. Renew before expiry to avoid a Rwf 50,000 penalty (6–15 days late) or higher statutory fines. / Amafaranga ya leta aterwa n'ubwoko bwa visa, bitwara iminsi ~4 y'akazi.",
+    fields: [
+      'fullName', 'billingPhone', 'email',
+      'nationality', 'documentType', 'visaCategory', 'visaType', 'paymentCurrency',
+      'dateOfBirth', 'gender', 'civilStatus', 'profession',
+      'motherName', 'fatherName', 'countryOfBirth', 'addressInRwanda',
+      'passportNumber', 'passportIssueDate', 'passportExpiryDate',
+      'currentVisaNumber', 'currentVisaExpiryDate', 'renewalDuration', 'travelReason'
+    ]
+  },
+  permit_application: {
+    key: 'permit_application',
+    name: "Permit Application (Gusaba uruhushya rwo gutura / gukora mu Rwanda)",
+    category: 'Immigration & Emigration',
+    officialFee: 0,
+    agentFee: 3000,
+    processingDays: 7,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note: "Official DGIE fee depends on permit category & class (some permits are free; paid permits generate an Irembo 88... Bill ID). Processing takes ~7 days after arriving in Rwanda. / Amafaranga ya leta aterwa n'icyiciro cy'uruhushya, bitwara iminsi ~7.",
+    fields: [
+      'fullName', 'billingPhone', 'email',
+      'nationality', 'documentType',
+      'dateOfBirth', 'gender', 'civilStatus', 'profession', 'occupation',
+      'fatherName', 'motherName', 'countryOfBirth', 'cityOfBirth', 'currentAddress',
+      'permitCategory', 'permitTypeAndClass',
+      'passportNumber', 'passportIssueDate', 'passportExpiryDate',
+      'dependentDetails'
+    ]
+  },
+  resident_id_card: {
+    key: 'resident_id_card',
+    name: "Resident ID Card (Indangamuntu y'umunyamahanga utuye mu Rwanda)",
+    category: 'Immigration & Emigration',
+    officialFee: 5000,
+    agentFee: 2000,
+    processingDays: 5,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note: "Official DGIE fee is Rwf 5,000 (5 days processing) for foreign residents aged 16+ with a valid travel document and Rwandan permit (> 6 months validity). / Amafaranga ya leta ni Rwf 5,000, bitwara iminsi 5.",
+    fields: [
+      'fullName', 'billingPhone', 'email',
+      'residentIdRequestType', 'nationality',
+      'passportNumber', 'passportExpiryDate',
+      'currentPermitNumber', 'permitExpiryDate',
+      'existingResidentIdNumber', 'collectionOffice'
+    ]
+  },
+  foreign_travel_document: {
+    key: 'foreign_travel_document',
+    name: "Foreign Travel Document (Icyangombwa cy'urugendo cy'umunyamahanga)",
+    category: 'Immigration & Emigration',
+    officialFee: 0,
+    agentFee: 2500,
+    processingDays: 7,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note: "Official DGIE processing time is 7 days; fee depends on the desired travel document (contact DGIE first before applying, and visit DGIE for instructions after payment). / Bitwara iminsi 7, amafaranga aterwa n'icyangombwa gisabwa.",
+    fields: [
+      'fullName', 'billingPhone', 'email',
+      'nationality', 'passportNumber', 'desiredDocumentType',
+      'contactedDgieFirst', 'travelReason', 'destinationAndOffice'
+    ]
+  },
+  refugee_travel_document: {
+    key: 'refugee_travel_document',
+    name: "Refugee Travel Document (Icyangombwa cy'urugendo cy'impunzi)",
+    category: 'Immigration & Emigration',
+    officialFee: 20000,
+    agentFee: 2500,
+    processingDays: 2,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note: "Official DGIE fee is RWF 20,000 with a 2-day processing time; requires UNHCR Proof of Registration and Refugee ID/Card (biometrics scheduled after payment). / Amafaranga ya leta ni RWF 20,000, bitwara iminsi 2.",
+    fields: [
+      'fullName', 'billingPhone', 'email',
+      'refugeeRequestType', 'unhcrRegistrationNumber', 'refugeeIdNumber',
+      'previousTravelDocNumber', 'fatherName', 'motherName',
+      'livesInRefugeeCamp', 'collectionLocation',
+      'destinationCountry', 'travelReason'
+    ]
+  },
+  rwandan_nationality: {
+    key: 'rwandan_nationality',
+    name: "Rwandan Nationality (Gusaba ubwenegihugu bw'u Rwanda — Origin / Acquisition)",
+    category: 'Immigration & Emigration',
+    officialFee: 10000,
+    agentFee: 3000,
+    processingDays: 180,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note: "Official DGIE fee is RWF 5,000 for Nationality by Origin and RWF 10,000 for Nationality by Acquisition (~180 days / 6 months processing). / Amafaranga ya leta ni RWF 5,000 (Inkomoko) cyangwa RWF 10,000 (Kubona ubwenegihugu), iminsi ~180.",
+    fields: [
+      'fullName', 'billingPhone', 'email',
+      'nationalityPath', 'acquisitionGround',
+      'idDocumentType', 'idDocumentNumber', 'dateOfBirth',
+      'gender', 'civilStatus', 'fatherName', 'motherName',
+      'placeOfBirth', 'currentResidence',
+      'entryAndPermitDetails', 'groundSpecificDetails', 'witnessDetails'
+    ]
+  },
+  national_id_application: {
+    key: 'national_id_application',
+    name: "National ID Application (Gusaba Indangamuntu — NIDA)",
+    category: 'Identification',
+    officialFee: 500,
+    agentFee: 500,
+    processingDays: 30,
+    requiresEmail: true,
+    requiresAttachment: false,
+    note: "Official NIDA fee is Rwf 500 with a 30-day processing time after biometrics (for citizens aged 16+ with a Child ID / Citizen Application Number). / Amafaranga ya NIDA ni Rwf 500, bitwara iminsi 30 nyuma y'ibikumwe.",
+    fields: [
+      'fullName', 'childId', 'billingPhone', 'email',
+      'applicationMode', 'biometricDetails', 'collectionSector'
+    ]
+  },
+  national_id_replacement: {
+    key: 'national_id_replacement',
+    name: "National ID Replacement (Gusimbuza Indangamuntu yatakaye / yangiritse)",
+    category: 'Identification',
+    officialFee: 1500,
+    agentFee: 1500,
+    processingDays: 30,
+    requiresEmail: true,
+    requiresAttachment: false,
+    note: "Official NIDA fee is Rwf 1,500 after RIB approval (optional Rwf 3,000 temporary ID valid 60 days; 30 days processing). / Amafaranga ya NIDA ni Rwf 1,500 nyuma y'iyemezwa rya RIB, bitwara iminsi 30.",
+    fields: [
+      'fullName', 'nationalId', 'billingPhone', 'email',
+      'ribOffice', 'temporaryIdOption', 'collectionSector'
+    ]
+  },
+  certificate_of_replacement_id: {
+    key: 'certificate_of_replacement_id',
+    name: "Certificate of Replacement of National ID (Icyemezo cy'uko yasimbujwe)",
+    category: 'Identification',
+    officialFee: 3000,
+    agentFee: 1000,
+    processingDays: 1,
+    requiresEmail: true,
+    requiresAttachment: false,
+    note: "Official MINALOC fee is Rwf 3,000 with 1 working day processing (downloaded on IremboGov after Sector ES approval). / Amafaranga ya MINALOC ni Rwf 3,000, umunsi 1 w'akazi.",
+    fields: [
+      'fullName', 'nationalId', 'billingPhone', 'email',
+      'issuanceDistrict', 'issuanceSector', 'requestReason'
+    ]
+  },
+  national_id_correction: {
+    key: 'national_id_correction',
+    name: "National ID Correction (Gukosora Indangamuntu)",
+    category: 'Identification',
+    officialFee: 1500,
+    agentFee: 1500,
+    processingDays: 30,
+    requiresEmail: true,
+    requiresAttachment: false,
+    note: "Official NIDA fee is Rwf 1,500 for name, photo, or damaged ID correction (30 days processing; photo change requires prior NIDA approval). / Amafaranga ya NIDA ni Rwf 1,500 ku izina, ifoto cyangwa iyangiritse, iminsi 30.",
+    fields: [
+      'fullName', 'nationalId', 'billingPhone', 'email',
+      'correctionReason', 'correctedValue', 'processingOffice', 'collectionSector'
+    ]
+  },
+  certificate_of_full_identity: {
+    key: 'certificate_of_full_identity',
+    name: "Certificate of Full Identity (Icyemezo cy'umwirondoro wuzuye)",
+    category: 'Identification',
+    officialFee: 500,
+    agentFee: 1000,
+    processingDays: 1,
+    requiresEmail: true,
+    requiresAttachment: false,
+    note: "Official MINALOC fee is Rwf 500 with 1 working day processing; delivered as an e-certificate on IremboGov after Sector ES approval. / Amafaranga ya MINALOC ni Rwf 500, umunsi 1 w'akazi.",
+    fields: [
+      'fullName', 'nationalId', 'billingPhone', 'email',
+      'applicantCategory', 'occupationDetails', 'processingOffice', 'requestReason'
+    ]
+  },
+  change_of_name: {
+    key: 'change_of_name',
+    name: "Change of Name (Guhindura Amazina — Step I Submission / Step II Confirmation)",
+    category: 'Identification',
+    officialFee: 0,
+    agentFee: 2000,
+    processingDays: 7,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note: "Step I (Submission) is RWF 0 (7 days) followed by Gazette & 2 media announcements; Step II (Confirmation) is RWF 20,000 (7 days). / Icyiciro cya 1 ni RWF 0 (iminsi 7); icyiciro cya 2 ni RWF 20,000 (iminsi 7).",
+    fields: [
+      'fullName', 'nationalId', 'billingPhone', 'email',
+      'nameChangeStep', 'applicantType', 'stepReferenceId',
+      'desiredNames', 'changeReason', 'publicationDetails'
+    ]
+  },
+  certificate_of_nationality: {
+    key: 'certificate_of_nationality',
+    name: "Certificate of Nationality (Icyemezo cy'ubwenegihugu)",
+    category: 'Identification',
+    officialFee: 1500,
+    agentFee: 1000,
+    processingDays: 1,
+    requiresEmail: true,
+    requiresAttachment: false,
+    note: "Official MINALOC fee is Rwf 1,500 with 1 working day processing; downloadable on IremboGov after Sector ES approval. / Amafaranga ya MINALOC ni Rwf 1,500, umunsi 1 w'akazi.",
+    fields: [
+      'fullName', 'nationalId', 'billingPhone', 'email',
+      'certificateApplicantType', 'childIdNumber', 'processingOffice', 'requestReason'
+    ]
+  },
+  certificate_of_being_alive: {
+    key: 'certificate_of_being_alive',
+    name: "Certificate of Being Alive (Icyemezo cy'uko akiriho)",
+    category: 'Identification',
+    officialFee: 0,
+    agentFee: 1000,
+    processingDays: 1,
+    requiresEmail: true,
+    requiresAttachment: false,
+    note: "Official MINALOC fee is Rwf 0 (free) with 1 working day processing; downloadable on IremboGov after Sector ES approval. / Amafaranga ya MINALOC ni Rwf 0 (ku buntu), umunsi 1 w'akazi.",
+    fields: [
+      'fullName', 'nationalId', 'billingPhone', 'email',
+      'aliveApplicantType', 'childIdNumber', 'processingOffice', 'requestReason'
+    ]
+  },
 };
 
 const CATEGORIES = {
@@ -594,8 +955,7 @@ const CATEGORIES = {
       '18': { key: 'genocide_survivor_certificate', available: true },
       '19': { key: 'guardianship_record', available: true },
       '20': { key: 'ncpd_recommendation', available: true },
-      '21': { key: 'survivor_id_request', available: true },
-
+      '21': { key: 'survivor_id_request', available: true }
     }
   },
   '2': {
@@ -626,6 +986,38 @@ const CATEGORIES = {
     }
   },
   '4': {
+    name: "Abinjira n'Abasohoka / Immigration & Emigration (DGIE)",
+    services: {
+      '1': { key: 'epassport_application', available: true },
+      '2': { key: 'laissez_passer', available: true },
+      '3': { key: 'cepgl_travel_document', available: true },
+      '4': { key: 'permit_extension', available: true },
+      '5': { key: 'permit_transfer', available: true },
+      '6': { key: 'rwanda_visa_application', available: true },
+      '7': { key: 'rwanda_visa_renewal', available: true },
+      '8': { key: 'permit_application', available: true },
+      '9': { key: 'resident_id_card', available: true },
+      '10': { key: 'foreign_travel_document', available: true },
+      '11': { key: 'refugee_travel_document', available: true },
+      '12': { key: 'rwandan_nationality', available: true },
+
+    }
+  },
+  '5': {
+    name: "Irangamuntu / Identification (NIDA & MINALOC)",
+    services: {
+      '1': { key: 'national_id_application', available: true },
+      '2': { key: 'national_id_replacement', available: true },
+      '3': { key: 'national_id_correction', available: true },
+      '4': { key: 'certificate_of_replacement_id', available: true },
+      '5': { key: 'certificate_of_full_identity', available: true },
+      '6': { key: 'change_of_name', available: true },
+      '7': { key: 'certificate_of_nationality', available: true },
+      '8': { key: 'certificate_of_being_alive', available: true },
+      
+    }
+  },
+  '6': {
     name: 'Izindi / Other',
     services: {
       '1': { key: 'other', available: false }

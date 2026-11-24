@@ -72,7 +72,8 @@ const V = {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(t)) return false;
     const d = new Date(t);
     if (isNaN(d.getTime())) return false;
-    const today = new Date(); today.setHours(0,0,0,0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
     return Math.ceil((d - today) / 86400000) >= 23;
   },
   wifeIdType: (t) => t.trim().length >= 3,
@@ -118,7 +119,7 @@ const E = {
   marriageDistrict: "⚠️ Andika Akarere mwashyingiwe / Enter the District where you married:",
   marriageSector: "⚠️ Andika Umurenge mwashyingiwe / Enter the Sector where you married:",
   marriageCountry: "⚠️ Andika igihugu / Enter the country:",
-  marriageDate: "⚠️ Itariki ntariyo cyangwa ntiyageze kuri 23 days. Andika nka 2026-08-15 / Invalid date or less than 23 days away. Format: YYYY-MM-DD:",
+  marriageDate: "⚠️ Itariki ntariyo cyangwa ntiyageze kuri 23 days. Andika nka 2026-12-20 / Invalid date or less than 23 days away. Format: YYYY-MM-DD:",
   wifeIdType: "⚠️ Hitamo ubwoko bw'icyangombwa / Select ID type:",
   wifeIdNumber: "⚠️ Nimero y'icyangombwa ntariyo. Ongera ugerageze / Invalid ID number. Try again:",
   wifeCountry: "⚠️ Andika igihugu / Enter country:",
@@ -178,32 +179,93 @@ const SERVICE_MODULES = {
   guardianship_record: './guardianshipRecord',
   ncpd_recommendation: './ncpdRecommendation',
   survivor_id_request: './survivorIdRequest',
+  epassport_application: './epassportApplication',
+  laissez_passer: './laissezPasser',
+  cepgl_travel_document: './cepglTravelDocument',
+  permit_extension: './permitExtension',
+  permit_transfer: './permitTransfer',
+  rwanda_visa_application: './rwandaVisaApplication',
+  rwanda_visa_renewal: './rwandaVisaRenewal',
+  permit_application: './permitApplication',
+  resident_id_card: './residentIdCard',
+  foreign_travel_document: './foreignTravelDocument',
+  refugee_travel_document: './refugeeTravelDocument',
+  rwandan_nationality: './rwandanNationality',
+  national_id_application: './nationalIdApplication',
+  national_id_replacement: './nationalIdReplacement',
+  certificate_of_replacement_id: './certificateOfReplacementId',
+  national_id_correction: './nationalIdCorrection',
+  certificate_of_full_identity: './certificateOfFullIdentity',
+  change_of_name: './changeOfName',
+  certificate_of_nationality: './certificateOfNationality',
+  certificate_of_being_alive: './certificateOfBeingAlive',
 
-  // new service? add one line here: serviceKey: './fileName'
 };
 
 function serviceModule(session) {
   const path = session && session.data && SERVICE_MODULES[session.data.serviceKey];
   return path ? require(path) : {};
 }
+
 function getQuestion(session, field) {
   const q = (serviceModule(session).QUESTIONS || {})[field] || Q[field];
   return typeof q === 'string' && q.trim() ? q.trim() : null;
 }
-function getValidator(session, field) { return (serviceModule(session).VALIDATORS || {})[field] || V[field]; }
-function getError(session, field)     { return (serviceModule(session).ERRORS     || {})[field] || E[field]; }
+
+function getValidator(session, field) {
+  return (serviceModule(session).VALIDATORS || {})[field] || V[field];
+}
+
+function getError(session, field) {
+  return (serviceModule(session).ERRORS || {})[field] || E[field];
+}
 
 function cleanValue(field, text, session) {
   const textFields = [
-    'fullName','email','motherName','fatherName',
-    'witness1Name','witness2Name','spouseName',
-    'marriageDistrict','marriageSector','marriageCountry','marriageDate',
-    'wifeIdType','wifeIdNumber','wifeCountry','wifeProvince','wifeDistrict','wifeSector','wifeCell','wifeVillage','wifeProfession','wifeJob','wifeEmail',
-    'husbandIdType','husbandIdNumber','husbandCountry','husbandProvince','husbandDistrict','husbandSector','husbandCell','husbandVillage','husbandProfession','husbandJob','husbandEmail'
+    'fullName', 'email', 'motherName', 'fatherName',
+    'witness1Name', 'witness2Name', 'spouseName',
+    'marriageDistrict', 'marriageSector', 'marriageCountry', 'marriageDate',
+    'wifeIdType', 'wifeIdNumber', 'wifeCountry', 'wifeProvince', 'wifeDistrict', 'wifeSector', 'wifeCell', 'wifeVillage', 'wifeProfession', 'wifeJob', 'wifeEmail',
+    'husbandIdType', 'husbandIdNumber', 'husbandCountry', 'husbandProvince', 'husbandDistrict', 'husbandSector', 'husbandCell', 'husbandVillage', 'husbandProfession', 'husbandJob', 'husbandEmail'
   ];
   const extra = serviceModule(session).TEXT_FIELDS || [];
   if (textFields.includes(field) || extra.includes(field)) return text.trim();
   return text.replace(/\s+/g, '');
+}
+
+function getDynamicOfficialFee(d = {}) {
+  if (d.serviceKey === 'epassport_application') {
+    const cat = String(d.passportCategory || '').trim();
+    if (cat === '1') return 75000;  // Ordinary e-Passport (5 years)
+    if (cat === '2') return 100000; // Ordinary e-Passport (10 years)
+    if (cat === '3') return 25000;  // Minor e-Passport (<16 yrs, 5 years)
+    if (cat === '4') return 50000;   // Service / Official e-Passport
+  }
+  if (d.serviceKey === 'laissez_passer') {
+    return String(d.ageGroup || '').trim() === '2' ? 5000 : 10000;
+  }
+  if (d.serviceKey === 'cepgl_travel_document') {
+    return String(d.nationalityType || '').trim() === '2' ? 10000 : 1000;
+  }
+  if (d.serviceKey === 'rwanda_visa_application') {
+    const vt = String(d.visaType || '').trim();
+    if (vt === '1' || vt === '4') return 68000; // V1-1 Single Entry / Conference ($50)
+    if (vt === '2') return 95000;               // V1-2 Multiple Entry ($70)
+    if (vt === '3') return 136000;              // V11 East Africa Tourist Visa ($100)
+    if (vt === '5') return 41000;               // Transit Visa ($30)
+    return 0;                                   // Other subclass (varies)
+  }
+  if (d.serviceKey === 'rwandan_nationality') {
+  return String(d.nationalityPath || '').trim() === '1' ? 5000 : 10000;
+}
+if (d.serviceKey === 'national_id_replacement') {
+    return String(d.temporaryIdOption || '').trim() === '1' ? 4500 : 1500;
+  }
+
+  if (d.serviceKey === 'change_of_name') {
+    return String(d.nameChangeStep || '').trim() === '2' ? 20000 : 0;
+  }
+  return d.officialFee || 0;
 }
 
 // ---------- shared flow helpers ----------
@@ -258,6 +320,117 @@ async function saveAndConfirm(from, session) {
   const d = session.data;
   const ts = new Date().toLocaleString('en-GB', { timeZone: 'Africa/Kigali' });
   const mod = serviceModule(session);
+  const officialFee = getDynamicOfficialFee(d);
+  const agentFee = d.agentFee || 0;
+
+  const permitCategoryLabel =
+    d.permitCategory === '1'
+      ? 'Temporary Residence Permit (Igihe gito)'
+      : d.permitCategory === '2'
+        ? 'Permanent Residence Permit (Igihe kirambye)'
+        : d.permitCategory || '';
+
+        const residentIdRequestTypeLabel =
+  d.residentIdRequestType === '1'
+    ? 'First Application (Bwa mbere)'
+    : d.residentIdRequestType === '2'
+      ? 'Renewal (Kuvugurura)'
+      : d.residentIdRequestType === '3'
+        ? 'Replacement (Gusimbuza)'
+        : d.residentIdRequestType || '';
+
+        const contactedDgieFirstLabel =
+  d.contactedDgieFirst === '1'
+    ? 'Yes (Yego)'
+    : d.contactedDgieFirst === '2'
+      ? 'No (Oya)'
+      : d.contactedDgieFirst || '';
+
+      const refugeeRequestTypeLabel =
+  d.refugeeRequestType === '1'
+    ? 'First Application (Bwa mbere)'
+    : d.refugeeRequestType === '2'
+      ? 'Renewal (Kuvugurura)'
+      : d.refugeeRequestType || '';
+
+const livesInRefugeeCampLabel =
+  d.livesInRefugeeCamp === '1'
+    ? 'Yes (Yego)'
+    : d.livesInRefugeeCamp === '2'
+      ? 'No (Oya)'
+      : d.livesInRefugeeCamp || '';
+
+      const nationalityPathLabel =
+  d.nationalityPath === '1'
+    ? 'By Origin (Inkomoko — Rwf 5,000)'
+    : d.nationalityPath === '2'
+      ? 'By Acquisition (Kubona ubwenegihugu — Rwf 10,000)'
+      : d.nationalityPath || '';
+
+const acquisitionGroundLabel =
+  d.acquisitionGround === '1' ? 'By Origin'
+    : d.acquisitionGround === '2' ? 'By Residence'
+    : d.acquisitionGround === '3' ? 'Being an Immigrant'
+    : d.acquisitionGround === '4' ? 'Birth on Territory of Rwanda'
+    : d.acquisitionGround === '5' ? 'Marriage / Adoption / Statelessness / Other'
+    : d.acquisitionGround || '';
+
+    const applicationModeLabel =
+  d.applicationMode === '1'
+    ? 'Self (Rwf 500)'
+    : d.applicationMode === '2'
+      ? 'Bulk (Group / Organization)'
+      : d.applicationMode || '';
+
+      const temporaryIdOptionLabel =
+    d.temporaryIdOption === '1'
+      ? 'Yes — Temporary ID (60 days) + Replacement'
+      : d.temporaryIdOption === '2'
+        ? 'No — Replacement Only'
+        : d.temporaryIdOption || '';
+
+        const correctionReasonLabel =
+    d.correctionReason === '1' ? 'Change of Names (Rwf 1,500)'
+      : d.correctionReason === '2' ? 'Photo Change (Rwf 1,500)'
+      : d.correctionReason === '3' ? 'Damaged ID (Rwf 1,500)'
+      : d.correctionReason === '4' ? 'Date of Birth'
+      : d.correctionReason === '5' ? 'Gender / Other'
+      : d.correctionReason || '';
+
+      const applicantCategoryLabel =
+  d.applicantCategory === '1'
+    ? 'Self / Adult (16+)'
+    : d.applicantCategory === '2'
+      ? 'Child (< 16)'
+      : d.applicantCategory || '';
+
+      const nameChangeStepLabel =
+    d.nameChangeStep === '1'
+      ? 'Step I — Submission (Rwf 0, 7 days)'
+      : d.nameChangeStep === '2'
+        ? 'Step II — Confirmation (Rwf 20,000, 7 days)'
+        : d.nameChangeStep || '';
+
+  const applicantTypeLabel =
+    d.applicantType === '1'
+      ? 'Adult (National ID)'
+      : d.applicantType === '2'
+        ? 'Child / Minor'
+        : d.applicantType || '';
+
+        const certificateApplicantTypeLabel =
+  d.certificateApplicantType === '1'
+    ? 'Self (16+)'
+    : d.certificateApplicantType === '2'
+      ? 'Child (< 16)'
+      : d.certificateApplicantType || '';
+
+      const aliveApplicantTypeLabel =
+  d.aliveApplicantType === '1'
+    ? 'Self (16+)'
+    : d.aliveApplicantType === '2'
+      ? 'Child (< 16)'
+      : d.aliveApplicantType || '';
 
   // Death flows use applicantId; other services use nationalId/childId
   const identifier = d.applicantType === 'Child'
@@ -286,8 +459,8 @@ async function saveAndConfirm(from, session) {
   // Trailing fee & status columns for every service tab
   const tailHeaders = ['Official Fee', 'Agent Fee', 'Attachment', 'Status'];
   const tailValues = [
-    d.officialFee || 0,
-    d.agentFee || 0,
+    officialFee,
+    agentFee,
     d.requiresAttachment ? 'PDF pending' : 'None',
     'Pending'
   ];
@@ -299,7 +472,7 @@ async function saveAndConfirm(from, session) {
   try {
     await writeNextRow(tabName, headers, row);
     console.log(`✅ Saved [${tabName}]: ${d.fullName || d.deceasedName} (+${from}) — ${d.service}`);
-    const total = (d.officialFee || 0) + (d.agentFee || 0);
+    const total = officialFee + agentFee;
     const place = [d.processingDistrict, d.processingSector].filter(Boolean).join(' / ');
 
     await sendWhatsAppMessage(from,
@@ -315,9 +488,101 @@ async function saveAndConfirm(from, session) {
       (d.relationshipToDeceased ? `• Isano / Relationship: ${d.relationshipToDeceased}\n` : '') +
       (place ? `• Ibiro / Processing office: ${place}\n` : '') +
       `• Telefoni: ${d.billingPhone}\n` +
+      (d.passportCategory ? `• Ubwoko bwa Pasiporo / Passport Category: ${d.passportCategory === '1' ? 'Ordinary (5 yrs - Rwf 75,000)' : d.passportCategory === '2' ? 'Ordinary (10 yrs - Rwf 100,000)' : d.passportCategory === '3' ? 'Minor (<16 yrs, 5 yrs - Rwf 25,000)' : d.passportCategory === '4' ? 'Service/Official (Rwf 5,000)' : d.passportCategory}\n` : '') +
+      (d.applicationType ? `• Ubwoko bwo gusaba / Application Type: ${d.applicationType === '1' ? 'First-time' : d.applicationType === '2' ? 'Renewal / Replacement' : d.applicationType}\n` : '') +
+      (d.currentPassportNumber && d.currentPassportNumber.toUpperCase() !== 'NONE' ? `• Pasiporo ishaje / Old Passport No.: ${d.currentPassportNumber}\n` : '') +
+      (d.biometricOffice ? `• Ibiro by'ibikumwe / Biometric Office: ${d.biometricOffice}\n` : '') +
+      (d.travelReason ? `• Impamvu y'urugendo / Travel Reason: ${d.travelReason}\n` : '') +
+      (d.nationality ? `• Ubwenegihugu / Nationality: ${d.nationality}\n` : '') +
+      (d.passportNumber ? `• Pasiporo / Passport No.: ${d.passportNumber}\n` : '') +
+      (d.currentPermitNumber ? `• Uruhushya / Permit No.: ${d.currentPermitNumber}\n` : '') +
+      (d.occupation ? `• Akazi / Occupation: ${d.occupation}\n` : '') +
+      (d.cityOfBirth ? `• Umujyi/Akarere yavukiyemo / City of Birth: ${d.cityOfBirth}\n` : '') +
+      (d.currentAddress ? `• Aderesi y'ubu mu Rwanda / Current Address: ${d.currentAddress}\n` : '') +
+      (d.permitCategory ? `• Icyiciro cy'uruhushya / Permit Category: ${permitCategoryLabel}\n` : '') +
+      (d.permitTypeAndClass ? `• Ubwoko n'icyiciro / Permit Type & Class: ${d.permitTypeAndClass}\n` : '') +
+      (d.passportIssueDate ? `• Itariki cyatangiriweho / Issue Date: ${d.passportIssueDate}\n` : '') +
+      (d.passportExpiryDate ? `• Itariki kizarangiriraho / Expiry Date: ${d.passportExpiryDate}\n` : '') +
+      (d.dependentDetails ? `• Abakugenderaho / Dependents: ${d.dependentDetails}\n` : '') +
+      (d.permitExpiryDate ? `• Itariki ruzarangiriraho / Permit Expiry: ${d.permitExpiryDate}\n` : '') +
+      (d.extensionDuration ? `• Igihe cyongerewe / Extension Duration: ${d.extensionDuration}\n` : '') +
+      (d.extensionReason ? `• Impamvu / Extension Reason: ${d.extensionReason}\n` : '') +
+      (d.sponsorName ? `• Umukoresha / Sponsor: ${d.sponsorName}\n` : '') +
+      (d.transferType ? `• Ubwoko bwo kwimura / Transfer Type: ${d.transferType === '1' ? 'New Passport Transfer' : d.transferType === '2' ? 'Employer / Sponsor Change' : d.transferType}\n` : '') +
+      (d.oldPassportNumber ? `• Pasiporo ishaje / Old Passport No.: ${d.oldPassportNumber}\n` : '') +
+      (d.newPassportNumber ? `• Pasiporo nshya / New Passport No.: ${d.newPassportNumber}\n` : '') +
+      (d.transferDetails ? `• Impamvu yo kwimura / Transfer Details: ${d.transferDetails}\n` : '') +
+      (d.documentType ? `• Ubwoko bw'icyangombwa / Document Type: ${d.documentType === '1' ? 'Ordinary Passport' : d.documentType === '2' ? 'Diplomatic / Service Passport' : d.documentType === '3' ? 'Travel Document / Laissez-Passer' : d.documentType}\n` : '') +
+      (d.visaCategory ? `• Icyiciro cya Visa / Visa Category: ${d.visaCategory === '1' ? 'Visitors Visa' : d.visaCategory === '2' ? 'Transit Visa' : d.visaCategory}\n` : '') +
+      (d.visaType ? `• Ubwoko bwa Visa / Visa Type: ${d.visaType === '1' ? 'V1-1 Single Entry ($50)' : d.visaType === '2' ? 'V1-2 Multiple Entry ($70)' : d.visaType === '3' ? 'V11 East Africa Tourist Visa ($100)' : d.visaType === '4' ? 'Conference ($50)' : d.visaType === '5' ? 'Transit ($30)' : d.visaType === '6' ? 'Other Subclass' : d.visaType}\n` : '') +
+      (d.paymentCurrency ? `• Ifaranga / Currency: ${d.paymentCurrency === '1' ? 'RWF' : d.paymentCurrency === '2' ? 'USD' : d.paymentCurrency}\n` : '') +
+      (d.dateOfBirth ? `• Itariki y'amavuko / DOB: ${d.dateOfBirth}\n` : '') +
+      (d.gender ? `• Igitsina / Gender: ${d.gender === '1' ? 'Male' : d.gender === '2' ? 'Female' : d.gender}\n` : '') +
+      (d.civilStatus ? `• Irangamimerere / Civil Status: ${d.civilStatus === '1' ? 'Single' : d.civilStatus === '2' ? 'Married' : d.civilStatus === '3' ? 'Divorced/Separated' : d.civilStatus === '4' ? 'Widowed' : d.civilStatus}\n` : '') +
+      (d.profession ? `• Umwuga / Profession: ${d.profession}\n` : '') +
+      (d.motherName ? `• Amazina ya nyina / Mother: ${d.motherName}\n` : '') +
+      (d.fatherName ? `• Amazina ya se / Father: ${d.fatherName}\n` : '') +
+      (d.countryOfBirth ? `• Igihugu yavukiyemo / Country of Birth: ${d.countryOfBirth}\n` : '') +
+      (d.currentAddress ? `• Aho atuye ubu / Current Address: ${d.currentAddress}\n` : '') +
+      (d.passportIssueDate ? `• Itariki Pasiporo yatangiweho / Issue Date: ${d.passportIssueDate}\n` : '') +
+      (d.passportExpiryDate ? `• Itariki Pasiporo izarangiriraho / Expiry Date: ${d.passportExpiryDate}\n` : '') +
+      (d.firstTimeInRwanda ? `• Ubwa mbere mu Rwanda / First Time: ${d.firstTimeInRwanda === '1' ? 'Yes' : d.firstTimeInRwanda === '2' ? 'No' : d.firstTimeInRwanda}\n` : '') +
+      (d.arrivalDate ? `• Itariki yo kuhagera / Arrival Date: ${d.arrivalDate}\n` : '') +
+      (d.departureDate ? `• Itariki yo gusohoka / Departure Date: ${d.departureDate}\n` : '') +
+      (d.entryPort ? `• Aho azinjirira / Port of Entry: ${d.entryPort}\n` : '') +
+      (d.addressInRwanda ? `• Aho azacumbika / Address in Rwanda: ${d.addressInRwanda}\n` : '') +
+      (d.currentVisaNumber ? `• Nimero ya Visa y'ubu / Current Visa No.: ${d.currentVisaNumber}\n` : '') +
+      (d.currentVisaExpiryDate ? `• Itariki Visa y'ubu izarangiriraho / Current Visa Expiry: ${d.currentVisaExpiryDate}\n` : '') +
+      (d.renewalDuration ? `• Igihe cy'inyongera / Renewal Duration: ${d.renewalDuration}\n` : '') +
+      (d.residentIdRequestType ? `• Ubwoko bw'ubusabe / Request Type: ${residentIdRequestTypeLabel}\n` : '') +
+      (d.existingResidentIdNumber && d.existingResidentIdNumber.toUpperCase() !== 'NONE' ? `• Resident ID isanzwe / Existing Resident ID: ${d.existingResidentIdNumber}\n` : '') +
+      (d.collectionOffice ? `• Aho izafatirwa / Collection Office: ${d.collectionOffice}\n` : '') +
+      (d.desiredDocumentType ? `• Icyangombwa gisabwa / Desired Document: ${d.desiredDocumentType}\n` : '') +
+      (d.contactedDgieFirst ? `• Yavuganye na DGIE mbere / Contacted DGIE: ${contactedDgieFirstLabel}\n` : '') +
+      (d.destinationAndOffice ? `• Aho ajya & Ibiro bya DGIE / Destination & DGIE Office: ${d.destinationAndOffice}\n` : '') +
+      (d.refugeeRequestType ? `• Ubwoko bw'ubusabe / Request Type: ${refugeeRequestTypeLabel}\n` : '') +
+      (d.unhcrRegistrationNumber ? `• UNHCR Proof of Registration: ${d.unhcrRegistrationNumber}\n` : '') +
+      (d.refugeeIdNumber && d.refugeeIdNumber.toUpperCase() !== 'NONE' ? `• Refugee ID / Card No.: ${d.refugeeIdNumber}\n` : '') +
+      (d.previousTravelDocNumber && d.previousTravelDocNumber.toUpperCase() !== 'NONE' ? `• Icyangombwa cyabanje / Previous Doc No.: ${d.previousTravelDocNumber}\n` : '') +
+      (d.livesInRefugeeCamp ? `• Atuye mu nkambi / In Refugee Camp: ${livesInRefugeeCampLabel}\n` : '') +
+      (d.collectionLocation ? `• Inkambi / Aho afatira / Camp or Office: ${d.collectionLocation}\n` : '') +
+      (d.destinationCountry ? `• Igihugu ajyamo / Destination Country: ${d.destinationCountry}\n` : '') +
+      (d.nationalityPath ? `• Inzira y'ubwenegihugu / Path: ${nationalityPathLabel}\n` : '') +
+      (d.acquisitionGround ? `• Impamvu / Ground: ${acquisitionGroundLabel}\n` : '') +
+      (d.birthAndResidenceDetails ? `• Amavuko & Aho atuye / Birth & Residence: ${d.birthAndResidenceDetails}\n` : '') +
+      (d.entryAndPermitDetails ? `• Kwinjira & Visa/Permit / Entry & Permit: ${d.entryAndPermitDetails}\n` : '') +
+      (d.referenceDetails ? `• Abatangabuhamya / References: ${d.referenceDetails}\n` : '') +
+      (d.applicationMode ? `• Uburyo bwo gusaba / Mode: ${applicationModeLabel}\n` : '') +
+      (d.biometricDetails ? `• Ibikumwe & Itariki / Biometrics: ${d.biometricDetails}\n` : '') +
+      (d.collectionSector ? `• Umurenge wo gufatiraho / Collection Sector: ${d.collectionSector}\n` : '') +  
+      (d.ribOffice ? `• Ibiro bya RIB / RIB Office: ${d.ribOffice}\n` : '') +
+      (d.temporaryIdOption ? `• Icyangombwa cy'agateganyo / Temp ID: ${temporaryIdOptionLabel}\n` : '') +
+      (d.issuanceDistrict ? `• Akarere yatangiwemo / Issuance District: ${d.issuanceDistrict}\n` : '') +
+      (d.issuanceSector ? `• Umurenge yatangiwemo / Issuance Sector: ${d.issuanceSector}\n` : '') +
+      (d.requestReason ? `• Impamvu / Request Reason: ${d.requestReason}\n` : '') +
+      (d.correctionReason ? `• Impamvu yo gukosora / Correction Reason: ${correctionReasonLabel}\n` : '') +
+      (d.correctedValue ? `• Amakuru akosoye / Corrected Value: ${d.correctedValue}\n` : '') +
+      (d.processingOffice ? `• Ibiro bisuzuma / Processing Office: ${d.processingOffice}\n` : '') +
+      (d.collectionSector ? `• Umurenge wo gufatiraho / Collection Sector: ${d.collectionSector}\n` : '') +
+      (d.applicantCategory ? `• Icyiciro cy'usaba / Category: ${applicantCategoryLabel}\n` : '') +
+      (d.occupationDetails ? `• Umwuga / Occupation: ${d.occupationDetails}\n` : '') +
+      (d.processingOffice ? `• Ibiro bisuzuma / Processing Office: ${d.processingOffice}\n` : '') +
+      (d.requestReason ? `• Impamvu / Request Reason: ${d.requestReason}\n` : '') +
+      (d.nameChangeStep ? `• Icyiciro / Step: ${nameChangeStepLabel}\n` : '') +
+      (d.applicantType ? `• Usabirwa / Applicant: ${applicantTypeLabel}\n` : '') +
+      (d.stepReferenceId && d.stepReferenceId.toUpperCase() !== 'NONE' ? `• Nimero (Child ID / Step I Ref.): ${d.stepReferenceId}\n` : '') +
+      (d.desiredNames ? `• Amazina mashya / Desired Names: ${d.desiredNames}\n` : '') +
+      (d.changeReason ? `• Impamvu / Reason: ${d.changeReason}\n` : '') +
+      (d.certificateApplicantType ? `• Usabirwa / Applicant: ${certificateApplicantTypeLabel}\n` : '') +
+      (d.childIdNumber && d.childIdNumber.toUpperCase() !== 'NONE' ? `• Child ID / App No.: ${d.childIdNumber}\n` : '') +
+      (d.processingOffice ? `• Akarere & Umurenge / Processing Office: ${d.processingOffice}\n` : '') +
+      (d.requestReason ? `• Impamvu / Request Reason: ${d.requestReason}\n` : '') +
+      (d.aliveApplicantType ? `• Usabirwa / Applicant: ${aliveApplicantTypeLabel}\n` : '') +
+      (d.childIdNumber && d.childIdNumber.toUpperCase() !== 'NONE' ? `• Child ID / App No.: ${d.childIdNumber}\n` : '') +
+      (d.processingOffice ? `• Akarere & Umurenge / Processing Office: ${d.processingOffice}\n` : '') +
+      (d.requestReason ? `• Impamvu / Request Reason: ${d.requestReason}\n` : '') +
       (d.survivalLocation ? `• Aho yarokokeye (1994) / Where Survived: ${d.survivalLocation}\n` : '') +
       (d.survivalContext ? `• Amakuru y'uburokore / Survival Details: ${d.survivalContext}\n` : '') +
-      (d.residenceCell ? `• Akagari / Cell: ${d.residenceCell}\n` : '') +
       (d.residenceReason ? `• Impamvu / Reason: ${d.residenceReason}\n` : '') +
       (d.residenceCell ? `• Akagari / Cell: ${d.residenceCell}\n` : '') +
       (d.residenceVillage ? `• Umudugudu / Village: ${d.residenceVillage}\n` : '') +
@@ -367,7 +632,6 @@ async function saveAndConfirm(from, session) {
       (d.spouseName ? `• Uwo mwatandukanye / Former Spouse: ${d.spouseName}\n` : '') +
       (d.spouseId ? `• Irangamuntu ye / Former Spouse ID: ${d.spouseId}\n` : '') +
       (d.divorceDate ? `• Itariki y'ubutane / Divorce Date: ${d.divorceDate}\n` : '') +
-      (d.divorceDate ? `• Itariki y'ubutane / Divorce Date: ${d.divorceDate}\n` : '') +
       (d.divorceRecordNumber ? `• Nimero y'inyandiko y'ubutane / Divorce Record No.: ${d.divorceRecordNumber}\n` : '') +
       (d.childIdNumber ? `• Irangamuntu / NIN y'umwana / Child ID: ${d.childIdNumber}\n` : '') +
       (d.guardianshipDetails ? `• Amakuru y'ubwishingire / Guardianship Details: ${d.guardianshipDetails}\n` : '') +
@@ -376,8 +640,8 @@ async function saveAndConfirm(from, session) {
       (d.companyTin && d.companyTin.toUpperCase() !== 'NONE' ? `• TIN y'ikigo / Company TIN: ${d.companyTin}\n` : '') +
       (d.recommendationPurpose ? `• Impamvu / Purpose: ${d.recommendationPurpose}\n` : '') +
       (d.testMode ? `• Uburyo / Exam Mode: ${d.testMode}\n` : '') +
-      `\n💰 *Amafaranga / Fees:*\n• Official: Rwf ${(d.officialFee || 0).toLocaleString()}\n` +
-      `• Agent: Rwf ${(d.agentFee || 0).toLocaleString()}\n• *Total: Rwf ${total.toLocaleString()}*\n\n` +
+      `\n💰 *Amafaranga / Fees:*\n• Official: Rwf ${officialFee.toLocaleString()}\n` +
+      `• Agent: Rwf ${agentFee.toLocaleString()}\n• *Total: Rwf ${total.toLocaleString()}*\n\n` +
       "Umukozi wacu agiye kubishyira muri Irembo, arakohererezwa kode yo kwishyura (Billing ID) mu kanya!"
     );
   } catch (err) {
@@ -387,4 +651,17 @@ async function saveAndConfirm(from, session) {
   delete userSessions[from];
 }
 
-module.exports = { userSessions, Q, V, E, cleanValue, getQuestion, getValidator, getError, askNextField, saveAndConfirm, sendWhatsAppMessage };
+module.exports = {
+  userSessions,
+  Q,
+  V,
+  E,
+  cleanValue,
+  getDynamicOfficialFee,
+  getQuestion,
+  getValidator,
+  getError,
+  askNextField,
+  saveAndConfirm,
+  sendWhatsAppMessage
+};
