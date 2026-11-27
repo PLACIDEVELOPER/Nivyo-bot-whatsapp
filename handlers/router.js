@@ -47,7 +47,7 @@ function categoryMenuText() {
   const lastKey = keys[keys.length - 1] || '5';
 
   return (
-    "Muraho! Murakaza neza kuri Serivisi za Irembo.\n" +
+    "Muraho! Murakaza neza kuri NIVYO MT turabafasha Serivisi z' Irembo mugihe gito, kugiciro gito bidasabye ko uva aho uri hitamo service ushaka ukanda umubare bihura ukomeze.\n"  +
     "Hitamo icyiciro / Choose a category:\n\n" +
     lines.join('\n') +
     "\n\n" +

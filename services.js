@@ -929,6 +929,977 @@ const SERVICES = {
       'aliveApplicantType', 'childIdNumber', 'processingOffice', 'requestReason'
     ]
   },
+  land_transfer_sale: {
+    key: 'land_transfer_sale',
+    name: "Title Transfer - Voluntary Sale (Ihererekanya ry'ubutaka - Kugurisha)",
+    category: 'Land',
+    officialFee: 0,
+    agentFee: 2000,
+    processingDays: 7,
+    requiresEmail: true,
+    requiresAttachment: false,
+    note:
+      "Processing time: 7 working days; Official IremboGov fee: Free (Rwf 0). " +
+      "A separate private notary fee applies if you choose a private notary, and land tax arrears must be cleared first.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'parcelUpi',
+      'sellerId',
+      'buyerType',
+      'buyerName',
+      'buyerIdentifier',
+      'buyerAddress',
+      'buyerUpi',
+      'percentageBought',
+      'parcelPrice',
+      'salePrice',
+      'representativeName',
+      'representativeAddress',
+      'notaryOption',
+      'buyerPhone'
+    ]
+  },
+  land_transfer_donation: {
+    key: 'land_transfer_donation',
+    name: "Title Transfer - Donation (Ihererekanya ry'ubutaka - Impano)",
+    category: 'Land',
+    officialFee: 0,
+    agentFee: 2000,
+    processingDays: 7,
+    requiresEmail: true,
+    requiresAttachment: false,
+    note:
+      "Processing time: 7 working days; Official fee varies by notarization option (Sector Land Manager vs. Private Notary, where a separate notary fee applies). Land tax arrears must be cleared first.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'parcelUpi',
+      'donorId',
+      'doneeType',
+      'doneeName',
+      'doneeIdentifier',
+      'doneeAddress',
+      'doneeUpi',
+      'relationship',
+      'percentageDonated',
+      'estimatedValue',
+      'representativeName',
+      'representativeAddress',
+      'notaryOption',
+      'doneePhone'
+    ]
+  },
+  land_transfer_exchange: {
+    key: 'land_transfer_exchange',
+    name: "Title Transfer - Exchange (Ihererekanya ry'ubutaka - Guhana)",
+    category: 'Land',
+    officialFee: 1500,
+    agentFee: 2000,
+    processingDays: 7,
+    requiresEmail: true,
+    requiresAttachment: false,
+    note:
+      "Processing time: 7 working days; Official IremboGov fee: Rwf 1,500 (separate private notary fee applies if choosing a private notary). Both parcels must have no land tax arrears or caveats.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'firstParcelUpi',
+      'firstPartyId',
+      'firstParcelValue',
+      'secondPartyType',
+      'secondPartyName',
+      'secondPartyIdentifier',
+      'secondPartyAddress',
+      'secondPartyOrgUpi',
+      'secondParcelUpi',
+      'secondParcelValue',
+      'equalizationAmount',
+      'representativeName',
+      'representativeAddress',
+      'notaryOption',
+      'secondPartyPhone'
+    ]
+  },
+  land_transfer_succession: {
+    key: 'land_transfer_succession',
+    name: "Title Transfer - Succession (Ihererekanya ry'ubutaka - Izungura)",
+    category: 'Land',
+    officialFee: 0,
+    agentFee: 2000,
+    processingDays: 13,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time: 13 working days; Official IremboGov fee: Free (Rwf 0). " +
+      "Requires original land title, death certificate, legal succession proof (sector certificate of heirs, will, or court ruling), and IDs of all heirs.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'parcelUpi',
+      'deceasedName',
+      'deceasedId',
+      'deathCertRef',
+      'successionBasis',
+      'successionDocRef',
+      'relationship',
+      'heirsDetails',
+      'ownershipMode',
+      'representativeName',
+      'representativeAddress'
+    ]
+  },
+  land_subdivision: {
+    key: 'land_subdivision',
+    name: "Subdivision Land Service (Kugabanya ubutaka)",
+    category: 'Land',
+    officialFee: 0,
+    agentFee: 2000,
+    processingDays: 30,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time: 30 working days; Official IremboGov fee: Free (Rwf 0). " +
+      "Minimum agricultural plot size for subdivision is 1 hectare. Requires original land title, approved deed plans, and survey report from a licensed land surveyor.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'parcelUpi',
+      'ownerType',
+      'ownerIdentifier',
+      'currentArea',
+      'landUse',
+      'plotCount',
+      'plotBreakdown',
+      'surveyorName',
+      'surveyorLicense',
+      'representativeName',
+      'representativeAddress'
+    ]
+  },
+  land_subdivision_coownership: {
+    key: 'land_subdivision_coownership',
+    name: "Subdivision of Agricultural Land Held in Co-Ownership (Kugabanya ubutaka bw'ubuhinzi buhuriweho)",
+    category: 'Land',
+    officialFee: 0,
+    agentFee: 2000,
+    processingDays: 30,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time: 30 working days; Official IremboGov fee: Free (Rwf 0). " +
+      "Requires selecting a licensed land surveyor, co-owners' partition agreement/consent, original land title, and IDs of all co-owners.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'parcelUpi',
+      'currentArea',
+      'coOwnersDetails',
+      'subdivisionBasis',
+      'plotCount',
+      'plotAllocation',
+      'surveyorName',
+      'surveyorLicense',
+      'representativeName',
+      'representativeAddress'
+    ]
+  },
+  land_update_id_names: {
+    key: 'land_update_id_names',
+    name: "Update Identification or Names in the Land Register (Guhuza umwirondoro cyangwa amazina ku cyangombwa cy'ubutaka)",
+    category: 'Land',
+    officialFee: 0,
+    agentFee: 1500,
+    processingDays: 13,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time: 13 days; Official IremboGov fee: Free (Rwf 0). " +
+      "Requires original land title, valid National ID/Passport/RDB/RGB certificate, and proof of name change or identity alignment.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'parcelUpi',
+      'ownerCategory',
+      'updateScope',
+      'oldName',
+      'oldIdentifier',
+      'newName',
+      'newIdentifier',
+      'supportingReason'
+    ]
+  },
+  land_change_representative: {
+    key: 'land_change_representative',
+    name: "Change the Legal Representative on a Land Title (Guhindura uhagarariye ubutaka mu mategeko)",
+    category: 'Land',
+    officialFee: 0,
+    agentFee: 1500,
+    processingDays: 13,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time: 13 days; Official IremboGov fee: Free (Rwf 0). " +
+      "Requires original land title, proof of legal appointment/authorization (board resolution, RDB/RGB certificate, power of attorney, or court order), and new representative's ID.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'parcelUpi',
+      'ownerCategory',
+      'ownerName',
+      'ownerIdentifier',
+      'previousRepName',
+      'newRepName',
+      'newRepId',
+      'newRepAddress',
+      'newRepPhone',
+      'changeBasis'
+    ]
+  },
+  land_spouse_update: {
+    key: 'land_spouse_update',
+    name: "Add or Remove Spouse in Land Register (Kongeraho cyangwa gukuraho uwo bashakanye ku cyangombwa cy'ubutaka)",
+    category: 'Land',
+    officialFee: 0,
+    agentFee: 1500,
+    processingDays: 13,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time: 13 working days; Official IremboGov fee: Free (Rwf 0). " +
+      "Requires original land title, IDs of spouses, and marriage/matrimonial proof (for adding) or death certificate/divorce ruling/property settlement (for removing).",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'parcelUpi',
+      'actionType',
+      'ownerName',
+      'ownerId',
+      'spouseName',
+      'spouseId',
+      'regimeOrBasis',
+      'certificateRef'
+    ]
+  },
+  land_merging: {
+    key: 'land_merging',
+    name: "Land Merging (Guhuza ibibanza by'ubutaka)",
+    category: 'Land',
+    officialFee: 0,
+    agentFee: 2000,
+    processingDays: 30,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time: 30 working days; Official IremboGov fee: Free (Rwf 0). " +
+      "Parcels must be adjacent, in the same cell, under the same owner(s), and share the same land use and land tenure regime.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'ownerName',
+      'ownerIdentifier',
+      'parcelUpis',
+      'contrastUpi',
+      'sharedLocation',
+      'sharedLandUse',
+      'sharedTenureRegime',
+      'representativeName',
+      'representativeAddress'
+    ]
+  },
+  land_first_registration: {
+    key: 'land_first_registration',
+    name: "First Land Registration (Kwandikisha ubutaka bwa mbere)",
+    category: 'Land',
+    officialFee: 0,
+    agentFee: 2000,
+    processingDays: 25,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time: 25 days; Official IremboGov fee: Free (Rwf 0). " +
+      "Requires completed application form, parcel number confirmation sheet, cell land committee ownership document, and conditional spouse/passport records.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'parcelUpi',
+      'ownerName',
+      'ownerId',
+      'parcelAddress',
+      'coOwnersDetails',
+      'representativeName',
+      'representativeId',
+      'representativeAddress'
+    ]
+  },
+  land_loan_authentication: {
+    key: 'land_loan_authentication',
+    name: "Authentication for Loan Agreement (Kwemeza amasezerano y'inguzanyo ku butaka)",
+    category: 'Land',
+    officialFee: 1000,
+    agentFee: 1500,
+    processingDays: 1,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time: 1 working day; Official IremboGov fee: Rwf 1,000 (results in a land collateral document). " +
+      "Requires land documents of the parcel and extract of the cadastral plan.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'parcelUpi',
+      'applicantType',
+      'applicantName',
+      'applicantIdentifier',
+      'applicantAddress',
+      'entityUpi',
+      'lenderName',
+      'loanAmount'
+    ]
+  },
+  land_boundary_rectification: {
+    key: 'land_boundary_rectification',
+    name: "Rectification of Boundaries and Area Correction (Gukosora imbibi cyangwa ubuso bw'ikibanza)",
+    category: 'Land',
+    officialFee: 0,
+    agentFee: 2000,
+    processingDays: 25,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time: 25 working days; Official IremboGov fee: Free (Rwf 0). " +
+      "Requires parcel UPI, owner ID/passport/NPR/TIN, reason for rectification, affected neighboring parcels (if any), and land surveyor details; produces new e-title(s) upon approval.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'parcelUpi',
+      'ownerIdentifier',
+      'areaDetails',
+      'rectificationReason',
+      'affectedNeighbors',
+      'surveyorName',
+      'surveyorContact'
+    ]
+  },
+  land_condominium_registration: {
+    key: 'land_condominium_registration',
+    name: "Registration of Condominium and Split of Condominium (Kwandikisha no kugabanya Condominium)",
+    category: 'Land',
+    officialFee: 0,
+    agentFee: 2000,
+    processingDays: 8,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time: 8 working days; Official IremboGov fee: Free (Rwf 0). " +
+      "Requires National ID or Passport, parcel UPI, valid phone and email, and number of condominium units; unit titles can be downloaded on the NLA portal upon approval.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'parcelUpi',
+      'applicantIdentifier',
+      'serviceMode',
+      'unitCount',
+      'unitDetails',
+      'parcelAddress'
+    ]
+  },
+  health_mutuelle: {
+    key: 'health_mutuelle',
+    name: "Community-Based Health Insurance - Mutuelle (Ubwishingizi bw'ubuzima - Mituweli)",
+    category: 'Health',
+    officialFee: 0,
+    agentFee: 1000,
+    processingDays: 0,
+    requiresEmail: true,
+    requiresAttachment: false,
+    note:
+      "Processing time: Instant after payment; Contribution depends on IMIBEREHO Dynamic Social Registry level and dependents/households. " +
+      "Requires Head of Household 16-digit National ID and phone/email for notification.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'paymentMode',
+      'headOfHouseholdId',
+      'householdDetails',
+      'contributionAmount'
+    ]
+  },
+  health_yellow_fever: {
+    key: 'health_yellow_fever',
+    name: "Yellow Fever Vaccination (Urukingo rwa Yellow Fever - RBC)",
+    category: 'Health',
+    officialFee: 15000,
+    agentFee: 1500,
+    processingDays: 1,
+    requiresEmail: true,
+    requiresAttachment: false,
+    note:
+      "Processing time: 1 day; Official IremboGov fee: Rwf 15,000 (RBC). " +
+      "Requires National ID (16+ Rwandans), Citizen Application Number (under-16 Rwandans), or Passport (foreigners), plus chosen RBC center, date, and time.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'applyingFor',
+      'applicantCategory',
+      'recipientIdentifier',
+      'vaccinationCenter',
+      'appointmentDate',
+      'appointmentTime'
+    ]
+  },
+  health_lab_test: {
+    key: 'health_lab_test',
+    name: "Laboratory Tests (Ibizamini bya Laboratwari)",
+    category: 'Health',
+    officialFee: 0,
+    agentFee: 1500,
+    processingDays: 1,
+    requiresEmail: true,
+    requiresAttachment: false,
+    note:
+      "Processing time: 1 day; Official fee depends on the selected test category, parameter(s), and quantity. " +
+      "Requires requester National ID/Passport/Entity name, test details, quantity, and preferred schedule.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'applicantType',
+      'requesterIdentifier',
+      'testCategory',
+      'specificTests',
+      'sampleQuantity',
+      'preferredSchedule'
+    ]
+  },
+  health_facility_licensing: {
+    key: 'health_facility_licensing',
+    name: "Health Facility Licensing (Uruhushya rwo gukoresha ivuriro - MoH)",
+    category: 'Health',
+    officialFee: 0,
+    agentFee: 2000,
+    processingDays: 30,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time: 30 days (15 days for staff updates); Official IremboGov fee: Free (Rwf 0, MoH). " +
+      "Requires Rwanda-registered TIN, facility/license details, and request-specific documents (business plan, director docs, incineration/ambulance contracts, or occupation permit).",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'facilityName',
+      'facilityTin',
+      'licensingAction',
+      'existingLicenseNo',
+      'facilityLocation',
+      'actionDetails'
+    ]
+  },
+  crim_record_certificate: {
+    key: 'crim_record_certificate',
+    name: "Criminal Record Certificate (Icyemezo cy'ubutabire - NPPA)",
+    category: 'Criminal Record & Investigation',
+    officialFee: 1200,
+    agentFee: 1000,
+    processingDays: 21,
+    requiresEmail: true,
+    requiresAttachment: false,
+    note:
+      "Processing time: 21 days (valid for 6 months); Official IremboGov fee: Rwf 1,200 (NPPA). " +
+      "Requires National ID / Citizen App No. (14+) / Foreigner ID / Refugee ID, chosen language, and conditional attachments where applicable.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'applyingFor',
+      'applicantId',
+      'certificateLanguage',
+      'requestPurpose',
+      'residencyStatus',
+      'province',
+      'district',
+      'sector',
+      'cell',
+      'village',
+      'isibo'
+    ]
+  },
+  crim_record_correction: {
+    key: 'crim_record_correction',
+    name: "Correction of Criminal Record Certificate (Gukosora icyemezo cy'ubutabire - NPPA)",
+    category: 'Criminal Record & Investigation',
+    officialFee: 0,
+    agentFee: 1000,
+    processingDays: 21,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time: 21 days; Official IremboGov fee: Free (Rwf 0, NPPA). " +
+      "Requires applicant ID/passport, details to correct, and supporting document(s).",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'applicantId',
+      'existingCertRef',
+      'correctionField',
+      'correctionDetails',
+      'residencyStatus',
+      'province',
+      'district',
+      'sector',
+      'cell',
+      'village',
+      'isibo'
+    ]
+  },
+  crim_investigation_clearance: {
+    key: 'crim_investigation_clearance',
+    name: "Criminal Investigation Clearance Certificate (Icyemezo cy'uko udakurikiranyweho icyaha - RIB)",
+    category: 'Criminal Record & Investigation',
+    officialFee: 1200,
+    agentFee: 1000,
+    processingDays: 3,
+    requiresEmail: true,
+    requiresAttachment: false,
+    note:
+      "Processing time: 3 days (valid for 3 months); Official IremboGov fee: Rwf 1,200 (RIB). " +
+      "Requires National ID / Citizen App No. (14+) / Foreigner ID / Refugee ID, chosen language, and conditional attachments where applicable.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'applyingFor',
+      'applicantId',
+      'certificateLanguage',
+      'requestPurpose',
+      'residencyStatus',
+      'province',
+      'district',
+      'sector',
+      'cell',
+      'village',
+      'isibo'
+    ]
+  },
+  crim_fingerprint_certificate: {
+    key: 'crim_fingerprint_certificate',
+    name: "Fingerprint Certificate (Icyemezo cy'ibikumwe - RIB)",
+    category: 'Criminal Record & Investigation',
+    officialFee: 1200,
+    agentFee: 1000,
+    processingDays: 7,
+    requiresEmail: true,
+    requiresAttachment: false,
+    note:
+      "Processing time: 7 days; Official IremboGov fee: Rwf 1,200 (RIB). " +
+      "Requires National ID / Citizen App No. (14+) / Foreigner ID / Passport, chosen language, and biometric fingerprint capture at the designated RIB station.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'applicantId',
+      'certificateLanguage',
+      'destinationCountry',
+      'requestPurpose',
+      'residencyStatus',
+      'province',
+      'district',
+      'sector',
+      'cell',
+      'village',
+      'isibo'
+    ]
+  },
+  crim_lost_theft_certificate: {
+    key: 'crim_lost_theft_certificate',
+    name: "Lost and Theft Certificate (Icyemezo cy'uko watakaje cyangwa wibwe - RIB)",
+    category: 'Criminal Record & Investigation',
+    officialFee: 0,
+    agentFee: 1000,
+    processingDays: 1,
+    requiresEmail: true,
+    requiresAttachment: false,
+    note:
+      "Processing time: 1 day; Official IremboGov fee: Free (Rwf 0, RIB). " +
+      "Requires National ID / Passport, details of lost/stolen item(s), incident date/location, and residential address.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'applicantId',
+      'incidentType',
+      'itemDetails',
+      'incidentDatePlace',
+      'residencyStatus',
+      'province',
+      'district',
+      'sector',
+      'cell',
+      'village',
+      'isibo'
+    ]
+  },
+  crim_good_conduct: {
+    key: 'crim_good_conduct',
+    name: "Certificate of Good Conduct (Icyemezo cy'imyitwarire myiza - RIB)",
+    category: 'Criminal Record & Investigation',
+    officialFee: 0,
+    agentFee: 1000,
+    processingDays: 7,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time: 7 days; Official IremboGov fee: Free of charge (Rwf 0, RIB). " +
+      "Requires Village & Cell recommendation letters, passport photo, and copy of National ID or Passport.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'applyingFor',
+      'applicantId',
+      'certificateLanguage',
+      'requestPurpose',
+      'residencyStatus',
+      'province',
+      'district',
+      'sector',
+      'cell',
+      'village',
+      'isibo'
+    ]
+  },
+  crim_interpol_vehicle_clearance: {
+    key: 'crim_interpol_vehicle_clearance',
+    name: "INTERPOL-KIGALI Motor Vehicle Clearance (Icyemezo cya INTERPOL ku kinyabiziga - RIB)",
+    category: 'Criminal Record & Investigation',
+    officialFee: 0,
+    agentFee: 1500,
+    processingDays: 10,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time: 10 days; Official IremboGov fee: Free of charge (Rwf 0, RIB). " +
+      "Requires vehicle registration card (Carte Jaune), chassis/VIN number, owner ID/passport/TIN, and physical/database verification.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'applicantId',
+      'plateNumber',
+      'chassisNumber',
+      'vehicleDetails',
+      'requestPurpose',
+      'residencyStatus',
+      'province',
+      'district',
+      'sector',
+      'cell',
+      'village',
+      'isibo'
+    ]
+  },
+
+  crim_deceased_transfer_clearance: {
+    key: 'crim_deceased_transfer_clearance',
+    name: "Clearance Certificate to Transfer a Deceased Body Abroad (Uruhushya rwo kujyana umurambo hanze - RIB)",
+    category: 'Criminal Record & Investigation',
+    officialFee: 0,
+    agentFee: 1500,
+    processingDays: 1,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time: 1 day; Official IremboGov fee: Free of charge (Rwf 0, RIB). " +
+      "Requires medical death certificate, embalming/non-contagious certificate, deceased ID/passport, and applicant ID/authorization.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'applicantRelation',
+      'deceasedName',
+      'deceasedId',
+      'deathDetails',
+      'destinationDetails',
+      'residencyStatus',
+      'province',
+      'district',
+      'sector',
+      'cell',
+      'village',
+      'isibo'
+    ]
+  },bp_building_permit: {
+    key: 'bp_building_permit',
+    name: "Application for a Building Permit (Gusaba uruhushya rwo kubaka)",
+    category: 'Building Permit Services',
+    officialFee: 0,
+    agentFee: 2500,
+    processingDays: 21,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time: 15-30 days depending on building category; Official fee varies by building category and floor area (BPMIS). " +
+      "Requires valid UPI, land title, stamped architectural/site plans, and structural/EIA reports where applicable.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'applicantType',
+      'ownerIdentifier',
+      'upi',
+      'buildingCategory',
+      'projectScope',
+      'province',
+      'district',
+      'sector',
+      'cell',
+      'village'
+    ]
+  },
+bp_occupancy_permit: {
+    key: 'bp_occupancy_permit',
+    name: "Application for an Occupancy Permit (Gusaba uruhushya rwo gutura / gukoresha inyubako)",
+    category: 'Building Permit Services',
+    officialFee: 0,
+    agentFee: 2500,
+    processingDays: 30,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time: 30 days (subject to final building inspection); Official fee depends on the case (RHA / BPMIS). " +
+      "Requires valid UPI, owner ID/TIN, building permit details, and completion/inspection documentation.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'applicantType',
+      'ownerIdentifier',
+      'upi',
+      'buildingPermitRef',
+      'occupancyDetails',
+      'province',
+      'district',
+      'sector',
+      'cell',
+      'village'
+    ]
+  },
+  bp_permit_renewal: {
+    key: 'bp_permit_renewal',
+    name: "Renewal / Extension of a Building Permit (Kongeresha igihe cy'uruhushya rwo kubaka)",
+    category: 'Building Permit Services',
+    officialFee: 0,
+    agentFee: 2000,
+    processingDays: 7,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time: 7 days; Official fee depends on the case (RHA / BPMIS). " +
+      "Requires existing building permit reference, UPI, owner ID/TIN, construction progress summary, and supporting attachments.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'applicantType',
+      'ownerIdentifier',
+      'upi',
+      'existingPermitDetails',
+      'extensionDetails',
+      'province',
+      'district',
+      'sector',
+      'cell',
+      'village'
+    ]
+  },
+  bp_permit_modification: {
+    key: 'bp_permit_modification',
+    name: "Modification / Amendment of an Approved Building Permit (Guhindura / Kuvugurura uruhushya rwo kubaka)",
+    category: 'Building Permit Services',
+    officialFee: 0,
+    agentFee: 2500,
+    processingDays: 30,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time: 30 days; Official fee depends on the case (RHA / BPMIS). " +
+      "Requires existing approved permit reference, UPI, owner ID/TIN, modified drawings, and modification justification.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'applicantType',
+      'ownerIdentifier',
+      'upi',
+      'existingPermitRef',
+      'modificationDetails',
+      'province',
+      'district',
+      'sector',
+      'cell',
+      'village'
+    ]
+  },
+  bp_demolition_permit: {
+    key: 'bp_demolition_permit',
+    name: "Application for a Demolition Permit (Gusaba uruhushya rwo gusenya inyubako)",
+    category: 'Building Permit Services',
+    officialFee: 0,
+    agentFee: 2000,
+    processingDays: 7,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time: 7 days; Official fee depends on the case (RHA / BPMIS). " +
+      "Requires valid UPI, owner ID/TIN, demolition plan/safety statement, and land ownership proof.",
+    fields: [
+      'fullName',
+      'nationalId',
+      'billingPhone',
+      'email',
+      'applicantType',
+      'ownerIdentifier',
+      'upi',
+      'demolitionReason',
+      'demolitionMethodSafety',
+      'province',
+      'district',
+      'sector',
+      'cell',
+      'village'
+    ]
+  },
+  bp_fence_construction: {
+    key: 'bp_fence_construction',
+    name: "Construction of Fence (Uruhushya rwo kubaka uruzitiro)",
+    category: 'Building Permit Services',
+    officialFee: 0,
+    agentFee: 2000,
+    processingDays: 14,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time varies by case; Official fee depends on case/BPMIS assessment. Requires UPI, owner ID/TIN, and fence plan/land title.",
+    fields: ['fullName', 'nationalId', 'billingPhone', 'email', 'applicantType', 'ownerIdentifier', 'upi', 'fenceDetails', 'province', 'district', 'sector', 'cell', 'village']
+  },
+
+  bp_change_of_use: {
+    key: 'bp_change_of_use',
+    name: "Change of Building Use Permit (Guhindura imikoreshereze y'inyubako)",
+    category: 'Building Permit Services',
+    officialFee: 0,
+    agentFee: 2500,
+    processingDays: 21,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time varies by case; Official fee depends on case/BPMIS assessment. Requires UPI, current/proposed use, and existing permit/plans.",
+    fields: ['fullName', 'nationalId', 'billingPhone', 'email', 'applicantType', 'ownerIdentifier', 'upi', 'useChangeDetails', 'existingBuildingRef', 'province', 'district', 'sector', 'cell', 'village']
+  },
+
+  bp_temporary_structure: {
+    key: 'bp_temporary_structure',
+    name: "Temporary Structures Authorization (Uruhushya rw'inyubako y'igihe gito)",
+    category: 'Building Permit Services',
+    officialFee: 0,
+    agentFee: 2000,
+    processingDays: 14,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time varies by case; Official fee depends on case/BPMIS assessment. Requires UPI, purpose/duration, and site layout/removal undertaking.",
+    fields: ['fullName', 'nationalId', 'billingPhone', 'email', 'applicantType', 'ownerIdentifier', 'upi', 'tempStructureDetails', 'province', 'district', 'sector', 'cell', 'village']
+  },
+
+  bp_refurbishment_no_alteration: {
+    key: 'bp_refurbishment_no_alteration',
+    name: "Refurbishment Without Structural Alteration (Kuvugurura inyubako nta mpinduka z'ubukomere)",
+    category: 'Building Permit Services',
+    officialFee: 0,
+    agentFee: 2000,
+    processingDays: 14,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time varies by case; Official fee depends on case/BPMIS assessment. Requires UPI, non-structural work scope, and land/permit proof.",
+    fields: ['fullName', 'nationalId', 'billingPhone', 'email', 'applicantType', 'ownerIdentifier', 'upi', 'refurbishmentScope', 'province', 'district', 'sector', 'cell', 'village']
+  },
+
+  bp_refurbishment_with_alteration: {
+    key: 'bp_refurbishment_with_alteration',
+    name: "Refurbishment With Structural Alteration (Kuvugurura inyubako bifite impinduka z'ubukomere)",
+    category: 'Building Permit Services',
+    officialFee: 0,
+    agentFee: 2500,
+    processingDays: 21,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time varies by case; Official fee depends on case/BPMIS assessment. Requires UPI, stamped structural plans, and land/permit proof.",
+    fields: ['fullName', 'nationalId', 'billingPhone', 'email', 'applicantType', 'ownerIdentifier', 'upi', 'structuralAlterationScope', 'province', 'district', 'sector', 'cell', 'village']
+  },
+
+  bp_inspection_notice: {
+    key: 'bp_inspection_notice',
+    name: "Inspection Notice (Itangazo ryo gusura / kugenzura imirimo y'ubwubatsi)",
+    category: 'Building Permit Services',
+    officialFee: 0,
+    agentFee: 1500,
+    processingDays: 7,
+    requiresEmail: true,
+    requiresAttachment: true,
+    note:
+      "Processing time varies by case; Official fee depends on case/BPMIS assessment. Requires building permit reference, UPI, and inspection stage.",
+    fields: ['fullName', 'nationalId', 'billingPhone', 'email', 'applicantType', 'ownerIdentifier', 'upi', 'buildingPermitRef', 'inspectionDetails', 'province', 'district', 'sector', 'cell', 'village']
+  },
 };
 
 const CATEGORIES = {
@@ -961,7 +1932,11 @@ const CATEGORIES = {
   '2': {
     name: 'Ubuzima / Health',
     services: {
-      '1': { key: 'mutuelle', available: false }
+      '1': { key: 'health_mutuelle', available: true },
+      '2': { key: 'health_yellow_fever', available: true },
+      '3': { key: 'health_lab_test', available: true },
+      '4': { key: 'health_facility_licensing', available: true },
+
     }
   },
   '3': {
@@ -1018,6 +1993,58 @@ const CATEGORIES = {
     }
   },
   '6': {
+    key: 'land',
+    name: 'Land (Ubutaka - NLA)',
+    services: {
+      '1': { key: 'land_transfer_sale', available: true },
+      '2': { key: 'land_transfer_donation', available: true },
+      '3': { key: 'land_transfer_exchange', available: true },
+      '4': { key: 'land_transfer_succession', available: true },
+      '5': { key: 'land_subdivision', available: true },
+      '6': { key: 'land_subdivision_coownership', available: true },
+      '7': { key: 'land_update_id_names', available: true },
+      '8': { key: 'land_change_representative', available: true },
+      '9': { key: 'land_spouse_update', available: true },
+      '10': { key: 'land_merging', available: true },
+      '11': { key: 'land_first_registration', available: true },
+      '12': { key: 'land_loan_authentication', available: true },
+      '13': { key: 'land_boundary_rectification', available: true },
+      '14': { key: 'land_condominium_registration', available: true },
+
+    }
+  },
+  '7': {
+    key: 'criminal_record',
+    name: 'Criminal Record & Investigation (Icyemezo cy’ubutabire n’iperereza)',
+    services: {
+      '1': { key: 'crim_record_certificate', available: true },
+      '2': { key: 'crim_record_correction', available: true },
+      '3': { key: 'crim_investigation_clearance', available: true },
+      '4': { key: 'crim_fingerprint_certificate', available: true },
+      '5': { key: 'crim_lost_theft_certificate', available: true },
+      '6': { key: 'crim_good_conduct', available: true },
+      '7': { key: 'crim_interpol_vehicle_clearance', available: true },
+      '8': { key: 'crim_deceased_transfer_clearance', available: true }
+    } 
+  },
+  '8': {
+    key: 'building_permit',
+    name: 'Building Permit Services (Serivisi z’uruhushya rwo kubaka)',
+    services: {
+      '1': { key: 'bp_building_permit', available: true },
+      '2': { key: 'bp_occupancy_permit', available: true },
+      '3': { key: 'bp_permit_renewal', available: true },
+      '4': { key: 'bp_permit_modification', available: true },
+      '5': { key: 'bp_demolition_permit', available: true },
+      '6': { key: 'bp_fence_construction', available: true },
+      '7': { key: 'bp_change_of_use', available: true },
+      '8': { key: 'bp_temporary_structure', available: true },
+      '9': { key: 'bp_refurbishment_no_alteration', available: true },
+      '10': { key: 'bp_refurbishment_with_alteration', available: true },
+      '11': { key: 'bp_inspection_notice', available: true }
+    }
+  },
+  '9': {
     name: 'Izindi / Other',
     services: {
       '1': { key: 'other', available: false }
