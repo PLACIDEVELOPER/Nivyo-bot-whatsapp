@@ -3,6 +3,7 @@ const { SERVICES, CATEGORIES } = require('../services');
 const {
   sendWhatsAppMessage,
   userSessions,
+  captureWhatsAppMedia,
   Q,
   cleanValue,
   getDynamicOfficialFee,
@@ -13,16 +14,57 @@ const {
 } = require('./common');
 const marriageDeclaration = require('./marriageDeclaration');
 
-async function handleMessage(from, text) {
-  const input = (text || '').trim();
+function extractMessageText(messageOrText) {
+  if (!messageOrText) return '';
+  if (typeof messageOrText === 'string') return messageOrText;
+  if (messageOrText.type === 'text') return messageOrText.text?.body || '';
+  if (messageOrText.type === 'interactive') {
+    return (
+      messageOrText.interactive?.button_reply?.id ||
+      messageOrText.interactive?.button_reply?.title ||
+      messageOrText.interactive?.list_reply?.id ||
+      messageOrText.interactive?.list_reply?.title ||
+      ''
+    );
+  }
+  return (
+    messageOrText.image?.caption ||
+    messageOrText.document?.caption ||
+    messageOrText.text?.body ||
+    ''
+  );
+}
+
+async function handleMessage(from, messageOrText) {
+  const isRawMessage = typeof messageOrText === 'object' && messageOrText !== null;
+  const input = extractMessageText(messageOrText).trim();
 
   if (!userSessions[from] || input.toLowerCase() === 'menu' || input === '0') {
-    userSessions[from] = { step: 'CATEGORY', data: {} };
+    userSessions[from] = { step: 'CATEGORY', data: {}, documents: [] };
     await sendWhatsAppMessage(from, categoryMenuText());
     return;
   }
 
   const session = userSessions[from];
+  if (!Array.isArray(session.documents)) {
+    session.documents = [];
+  }
+
+  if (isRawMessage && captureWhatsAppMedia(session, messageOrText)) {
+    const count = session.documents.length;
+    if (session.step === 'ATTACHMENT_UPLOAD') {
+      await sendWhatsAppMessage(
+        from,
+        `✅ File received (${count} attached so far). Send another file or type *done* to finish.`
+      );
+    } else {
+      await sendWhatsAppMessage(
+        from,
+        `📎 File received (${count} saved for your current session). Continue answering the prompts or type *0* for menu.`
+      );
+    }
+    return;
+  }
 
   switch (session.step) {
     case 'CATEGORY':            return handleCategory(from, input, session);
@@ -44,14 +86,12 @@ function categoryMenuText() {
     return `${k}. ${cat.name}${suffix}`;
   });
 
-  const lastKey = keys[keys.length - 1] || '5';
-
   return (
-    "Muraho! Murakaza neza kuri NIVYO MT turabafasha Serivisi z' Irembo mugihe gito, kugiciro gito bidasabye ko uva aho uri hitamo service ushaka ukanda umubare bihura ukomeze.\n"  +
+    "Muraho! Murakaza neza kuri NIVYO MT turabafasha Serivisi z' Irembo mugihe gito, kugiciro gito bidasabye ko uva aho uri hitamo service ushaka ukanda umubare bihura ukomeze.\n" +
     "Hitamo icyiciro / Choose a category:\n\n" +
     lines.join('\n') +
     "\n\n" +
-    `(Andika '0' igihe cyose ushaka gusubira ku ntangiriro / Type '0' anytime to return to start)`
+    "(Andika '0' igihe cyose ushaka gusubira ku ntangiriro / Type '0' anytime to return to start)"
   );
 }
 
@@ -82,7 +122,7 @@ async function handleCategory(from, text, session) {
 
 async function handleServiceSelect(from, text, session) {
   if (text === '0') {
-    userSessions[from] = { step: 'CATEGORY', data: {} };
+    userSessions[from] = { step: 'CATEGORY', data: {}, documents: [] };
     return sendWhatsAppMessage(from, categoryMenuText());
   }
 
@@ -208,7 +248,10 @@ async function handleAttachmentUpload(from, text, session) {
   if (text.toLowerCase() !== 'done') {
     return sendWhatsAppMessage(from, "📎 Send the PDF file(s), then type *done* when finished.");
   }
-  session.data.attachmentNote = 'Client sent PDF(s) — agent must download manually';
+  const docCount = Array.isArray(session.documents) ? session.documents.length : 0;
+  session.data.attachmentNote = docCount > 0
+    ? `Client sent ${docCount} file(s) — attached to notification email`
+    : 'Client typed done with no file attached';
   await saveAndConfirm(from, session);
 }
 

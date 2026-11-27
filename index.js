@@ -47,6 +47,13 @@ app.post('/webhook', async (req, res) => {
   const from = message.from;
 
   try {
+    // ---- interactive messages (buttons / lists) ----
+    if (message.type === 'interactive') {
+      console.log(`🔘 ${from} sent interactive reply`);
+      await handleMessage(from, message);
+      return;
+    }
+
     // ---- non-text messages ----
     if (message.type !== 'text') {
       const session = userSessions[from];
@@ -55,6 +62,7 @@ app.post('/webhook', async (req, res) => {
       if (session && session.step === 'ATTACHMENT_UPLOAD' && (message.type === 'document' || message.type === 'image')) {
         session.data.attachmentIds = session.data.attachmentIds || [];
         session.data.attachments = session.data.attachments || [];
+        session.documents = session.documents || [];
 
         if (message.type === 'document') {
           const doc = message.document || {};
@@ -71,7 +79,13 @@ app.post('/webhook', async (req, res) => {
           }
 
           session.data.attachmentIds.push(doc.id);
-          session.data.attachments.push({ id: doc.id, type: 'PDF', mimeType: mime, filename });
+          session.data.attachments.push({ id: doc.id, type: 'PDF', mimeType: mime || 'application/pdf', filename });
+          session.documents.push({
+            type: 'document',
+            mediaId: doc.id,
+            filename,
+            mimeType: mime || 'application/pdf',
+          });
           console.log(`📎 ${from} sent PDF (${session.data.attachmentIds.length}): ${filename}`);
         } else if (message.type === 'image') {
           const img = message.image || {};
@@ -85,8 +99,17 @@ app.post('/webhook', async (req, res) => {
             return;
           }
 
+          const ext = mime === 'image/png' ? 'png' : 'jpg';
+          const filename = img.filename || `image_${img.id}.${ext}`;
+
           session.data.attachmentIds.push(img.id);
-          session.data.attachments.push({ id: img.id, type: 'IMAGE', mimeType: mime || 'image/jpeg' });
+          session.data.attachments.push({ id: img.id, type: 'IMAGE', mimeType: mime || 'image/jpeg', filename });
+          session.documents.push({
+            type: 'image',
+            mediaId: img.id,
+            filename,
+            mimeType: mime || 'image/jpeg',
+          });
           console.log(`🖼️ ${from} sent image (${session.data.attachmentIds.length})`);
         }
 

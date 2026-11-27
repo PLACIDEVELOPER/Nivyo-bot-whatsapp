@@ -352,6 +352,38 @@ async function askNextField(from, session) {
   await sendWhatsAppMessage(from, question);
 }
 
+const { sendSubmissionEmail } = require('./emailNotification');
+
+// ...inside handlers/common.js right after `const userSessions = {};`:
+function captureWhatsAppMedia(session, message) {
+  if (!session || !message) return false;
+
+  if (!Array.isArray(session.documents)) {
+    session.documents = [];
+  }
+
+  if (message.type === 'document' && message.document?.id) {
+    session.documents.push({
+      type: 'document',
+      mediaId: message.document.id,
+      filename: message.document.filename || `document_${message.document.id}.pdf`,
+      mimeType: message.document.mime_type || 'application/pdf',
+    });
+    return true;
+  }
+
+  if (message.type === 'image' && message.image?.id) {
+    session.documents.push({
+      type: 'image',
+      mediaId: message.image.id,
+      filename: message.image.filename || `image_${message.image.id}.jpg`,
+      mimeType: message.image.mime_type || 'image/jpeg',
+    });
+    return true;
+  }
+
+  return false;
+}
 async function saveAndConfirm(from, session) {
   const d = session.data;
   const ts = new Date().toLocaleString('en-GB', { timeZone: 'Africa/Kigali' });
@@ -680,6 +712,24 @@ const acquisitionGroundLabel =
       `• Agent: Rwf ${agentFee.toLocaleString()}\n• *Total: Rwf ${total.toLocaleString()}*\n\n` +
       "Umukozi wacu agiye kubishyira muri Irembo, arakohererezwa kode yo kwishyura (Billing ID) mu kanya!"
     );
+  try {
+      await sendSubmissionEmail({
+        serviceName: d.service || tabName,
+        applicantPhone: `+${from}`,
+        fields: {
+          FullName: d.fullName || d.deceasedName || '',
+          NationalIdOrApplicantId: identifier || 'N/A',
+          BillingPhone: d.billingPhone || '',
+          Email: d.email || '',
+          OfficialFee: officialFee,
+          AgentFee: agentFee,
+        },
+        documents: Array.isArray(session.documents) ? session.documents : [],
+      });
+      session.documents = [];
+    } catch (emailErr) {
+      console.error('❌ Brevo email notification failed:', emailErr.response?.data || emailErr.message);
+    }
   } catch (err) {
     console.error('❌ Sheets Error:', err.message);
     await sendWhatsAppMessage(from, "⚠️ Error saving. Please try again / Ongera ugerageze.");
@@ -699,5 +749,6 @@ module.exports = {
   getError,
   askNextField,
   saveAndConfirm,
+  captureWhatsAppMedia,
   sendWhatsAppMessage
 };
