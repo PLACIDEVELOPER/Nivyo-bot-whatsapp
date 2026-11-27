@@ -1,13 +1,22 @@
 const axios = require('axios');
 
 const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
-const GRAPH_API_VERSION = process.env.WHATSAPP_GRAPH_VERSION || 'v21.0';
+const GRAPH_API_VERSION = process.env.WHATSAPP_GRAPH_VERSION || 'v26.0';
+
+function getWhatsAppToken() {
+  return (process.env.WHATSAPP_TOKEN || process.env.ACCESS_TOKEN || '').trim();
+}
 
 async function fetchWhatsAppMediaAttachment(doc) {
+  const token = getWhatsAppToken();
+  if (!token) {
+    throw new Error('Missing WHATSAPP_TOKEN or ACCESS_TOKEN');
+  }
+
   const metaResponse = await axios.get(
     `https://graph.facebook.com/${GRAPH_API_VERSION}/${doc.mediaId}`,
     {
-      headers: { Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}` },
+      headers: { Authorization: `Bearer ${token}` },
     }
   );
 
@@ -18,7 +27,7 @@ async function fetchWhatsAppMediaAttachment(doc) {
 
   const fileResponse = await axios.get(downloadUrl, {
     responseType: 'arraybuffer',
-    headers: { Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}` },
+    headers: { Authorization: `Bearer ${token}` },
   });
 
   const extension = doc.mimeType === 'application/pdf' ? 'pdf' : 'jpg';
@@ -36,9 +45,17 @@ async function sendSubmissionEmail({ serviceName, applicantPhone, fields = {}, d
   }
 
   const attachment = [];
+  const failedFiles = [];
+
   for (const doc of documents) {
     if (doc && doc.mediaId) {
-      attachment.push(await fetchWhatsAppMediaAttachment(doc));
+      try {
+        attachment.push(await fetchWhatsAppMediaAttachment(doc));
+      } catch (mediaErr) {
+        const label = doc.filename || doc.mediaId;
+        console.error(`⚠️ Failed to download WhatsApp media (${label}):`, mediaErr.response?.data || mediaErr.message);
+        failedFiles.push(`${label} (download failed)`);
+      }
     }
   }
 
@@ -46,10 +63,10 @@ async function sendSubmissionEmail({ serviceName, applicantPhone, fields = {}, d
     .map(([key, value]) => `- ${key}: ${value}`)
     .join('\n');
 
-  const filesText =
-    attachment.length > 0
-      ? attachment.map((item) => `- ${item.name}`).join('\n')
-      : '- None';
+  const fileLines = [
+    ...attachment.map((item) => `- ${item.name}`),
+    ...failedFiles.map((item) => `- ${item}`),
+  ];
 
   const textContent = [
     'New WhatsApp bot submission received.',
@@ -61,7 +78,7 @@ async function sendSubmissionEmail({ serviceName, applicantPhone, fields = {}, d
     detailsText || '- None',
     '',
     `Attached Files (${attachment.length}):`,
-    filesText,
+    fileLines.length > 0 ? fileLines.join('\n') : '- None',
   ].join('\n');
 
   const payload = {
@@ -90,6 +107,7 @@ async function sendSubmissionEmail({ serviceName, applicantPhone, fields = {}, d
 }
 
 module.exports = {
+  getWhatsAppToken,
   fetchWhatsAppMediaAttachment,
   sendSubmissionEmail,
 };
